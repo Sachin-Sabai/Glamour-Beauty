@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="{{ request.locale.iso_code }}">
+<html lang="{{ request.locale.iso_code }}">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,14 +27,26 @@
     {% endif %}
     {% render 'meta-tags' %}
     
-    {% comment %} theme-check-disable RemoteAsset {% endcomment %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    {%- assign font_heading = settings.font_heading -%}
+    {%- assign font_body = settings.font_body -%}
+    {%- assign font_accent = settings.font_accent -%}
 
-    {{ content_for_header }}
+    {%- assign font_heading_bold = font_heading | font_modify: 'weight', 'bolder' -%}
+    {%- assign font_heading_italic = font_heading | font_modify: 'style', 'italic' -%}
+    {%- assign font_body_bold = font_body | font_modify: 'weight', 'bold' -%}
+    {%- assign font_body_italic = font_body | font_modify: 'style', 'italic' -%}
+    {%- assign font_body_bold_italic = font_body_bold | font_modify: 'style', 'italic' -%}
 
     <style>
+      {{ font_heading | font_face: font_display: 'swap' }}
+      {{ font_body | font_face: font_display: 'swap' }}
+      {{ font_accent | font_face: font_display: 'swap' }}
+      
+      {%- if font_heading_bold -%}{{ font_heading_bold | font_face: font_display: 'swap' }}{%- endif -%}
+      {%- if font_heading_italic -%}{{ font_heading_italic | font_face: font_display: 'swap' }}{%- endif -%}
+      {%- if font_body_bold -%}{{ font_body_bold | font_face: font_display: 'swap' }}{%- endif -%}
+      {%- if font_body_italic -%}{{ font_body_italic | font_face: font_display: 'swap' }}{%- endif -%}
+      {%- if font_body_bold_italic -%}{{ font_body_bold_italic | font_face: font_display: 'swap' }}{%- endif -%}
       :root {
         --color-primary: {{ settings.color_primary }};
         --color-secondary: {{ settings.color_secondary }};
@@ -45,18 +57,24 @@
         --color-border: {{ settings.color_border }};
         --color-button-text: {{ settings.color_button_text }};
         --border-radius: {{ settings.border_radius }}px;
-        --font-heading: 'Playfair Display', serif;
-        --font-body: 'Poppins', sans-serif;
-        --font-script: 'Great Vibes', cursive;
+        --font-heading: {{ font_heading.family }}, {{ font_heading.fallback_families }};
+        --font-body: {{ font_body.family }}, {{ font_body.fallback_families }};
+        --font-accent: {{ font_accent.family }}, {{ font_accent.fallback_families }};
+        --font-heading-weight: {{ font_heading.weight }};
+        --font-heading-style: {{ font_heading.style }};
+        --font-body-weight: {{ font_body.weight }};
+        --font-body-style: {{ font_body.style }};
       }
     </style>
+
+    {{ content_for_header }}
 
     {{ 'theme.css' | asset_url | stylesheet_tag: preload: true }}
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
   </head>
 
   <body class="template-{{ request.page_type | handle }}">
-    <a class="skip-to-content-link" href="#MainContent">Skip to content</a>
+    <a href="#main-content" class="skip-to-content-link">Skip to content</a>
     <div id="scroll-progress-bar"></div>
 
     {% section 'announcement-bar' %}
@@ -66,7 +84,7 @@
       {% section 'cart-drawer' %}
     {% endif %}
 
-    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+    <main id="main-content" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
 
