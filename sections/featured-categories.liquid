@@ -1,0 +1,113 @@
+<div class="featured-categories" style="padding: 40px 0; background: var(--color-bg);">
+  <div class="container">
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
+        <div>
+          {%- if section.settings.subheading != blank -%}
+            <p style="font-family: var(--font-script); font-size: 24px; color: var(--color-primary); margin-bottom: 0px;">{{ section.settings.subheading }}</p>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 style="font-size: clamp(28px, 4vw, 42px); line-height: 1;">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+        </div>
+        <a href="{{ routes.collections_url }}" style="color: var(--color-text); font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--color-text); padding-bottom: 2px;">View All &rarr;</a>
+      </div>
+    {%- endif -%}
+
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+      <style>
+        @media (min-width: 768px) {
+          .featured-categories .grid-container {
+            grid-template-columns: repeat({{ section.blocks.size | at_most: 6 }}, 1fr) !important;
+          }
+        }
+      </style>
+      <div class="grid-container" style="display: contents;">
+        {%- for block in section.blocks -%}
+          <a href="{{ block.settings.link }}" class="category-card" {{ block.shopify_attributes }} style="display: flex; flex-direction: column; align-items: center; background: var(--color-accent); padding: 30px 15px; border-radius: 12px; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+            <div style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; margin-bottom: 15px; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 300 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="300" height="300" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+              {%- else -%}
+                {%- case forloop.index -%}
+                  {%- when 1 -%}<img src="{{ 'cat_makeup.png' | asset_url }}" alt="Makeup" width="300" height="300" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                  {%- when 2 -%}<img src="{{ 'cat_skincare.png' | asset_url }}" alt="Skincare" width="300" height="300" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                  {%- when 3 -%}<img src="{{ 'cat_haircare.png' | asset_url }}" alt="Haircare" width="300" height="300" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                  {%- when 4 -%}<img src="{{ 'cat_perfumes.png' | asset_url }}" alt="Perfumes" width="300" height="300" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                  {%- when 5 -%}<img src="{{ 'cat_bath.png' | asset_url }}" alt="Bath & Body" width="300" height="300" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                  {%- when 6 -%}<img src="{{ 'cat_tools.png' | asset_url }}" alt="Tools & Brushes" width="300" height="300" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                  {%- else -%}{{ 'collection-' | append: forloop.index | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- endcase -%}
+              {%- endif -%}
+            </div>
+            
+            <h3 style="color: var(--color-text); font-family: var(--font-body); font-weight: 600; font-size: 16px; margin: 0; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;">{{ block.settings.title }}</h3>
+            
+            <style>
+              .category-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+              .category-card:hover img { transform: scale(1.1); }
+            </style>
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Categories",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Essentials"
+    }
+  ],
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Skincare"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Categories",
+      "blocks": [
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-cart",
+      "settings": {}
+    },
+    "recommended": {
+      "type": "product-grid",
+      "settings": {
+        "heading": "Perfect Pairs",
+        "subheading": "Recommended"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "recommended"
+  ]
+}

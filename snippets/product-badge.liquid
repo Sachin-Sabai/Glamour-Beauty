@@ -1,0 +1,15 @@
+{%- if product.available == false -%}
+  <span class="badge badge-soldout">{{ 'products.product.out_of_stock' | t }}</span>
+{%- elsif product.compare_at_price > product.price -%}
+  <span class="badge badge-sale">{{ 'products.product.sale_badge' | t }}</span>
+{%- else -%}
+  {%- assign current_date = 'now' | date: '%s' -%}
+  {%- assign published_date = product.published_at | date: '%s' -%}
+  {%- assign days_ago = current_date | minus: published_date | divided_by: 86400 -%}
+  
+  {%- if days_ago < 30 -%}
+    <span class="badge badge-new">{{ 'products.product.new_badge' | t }}</span>
+  {%- elsif product.tags contains 'bestseller' or product.tags contains 'Best Seller' -%}
+    <span class="badge badge-bestseller">{{ 'products.product.bestseller_badge' | t }}</span>
+  {%- endif -%}
+{%- endif -%}

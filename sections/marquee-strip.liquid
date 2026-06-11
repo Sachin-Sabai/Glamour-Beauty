@@ -1,0 +1,75 @@
+<div class="marquee-section" style="background-color: {{ section.settings.bg_color }}; color: {{ section.settings.text_color }}; padding: 15px 0;">
+  <div class="marquee-wrapper">
+    <div class="marquee-content" style="animation-duration: {{ section.settings.speed }}s;">
+      {%- for i in (1..10) -%}
+        {%- for block in section.blocks -%}
+          <div class="marquee-item" style="display: flex; align-items: center; padding: 0 30px; font-weight: 500; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;" {{ block.shopify_attributes }}>
+            <span>{{ section.settings.icon }}</span>
+            <span style="margin-left: 10px;">{{ block.settings.text }}</span>
+          </div>
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Marquee Strip",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#C9A96E"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "text",
+      "id": "icon",
+      "label": "Separator Icon/Emoji",
+      "default": "✦"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "s",
+      "label": "Animation Speed",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Cruelty Free"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee Strip",
+      "blocks": [
+        { "type": "text", "settings": { "text": "Cruelty Free" } },
+        { "type": "text", "settings": { "text": "100% Natural" } },
+        { "type": "text", "settings": { "text": "Dermatologist Tested" } },
+        { "type": "text", "settings": { "text": "Vegan" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

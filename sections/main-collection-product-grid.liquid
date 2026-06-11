@@ -1,0 +1,161 @@
+<div class="collection-product-grid" style="padding: 40px 0; background: var(--color-bg);">
+  <div class="container">
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      <div style="display: flex; flex-wrap: wrap; gap: 40px;">
+        
+        <!-- Sidebar Filters -->
+        <div class="collection-filters" style="flex: 0 0 250px;">
+          <h3 style="font-family: var(--font-heading); font-size: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px;">Filters</h3>
+          <form id="FacetFiltersForm" class="filter-form" action="{{ request.path }}" method="get">
+            {%- if search.terms -%}
+              <input type="hidden" name="q" value="{{ search.terms | escape }}">
+              <input type="hidden" name="options[prefix]" value="last">
+            {%- endif -%}
+            {%- if collection.sort_by != blank or collection.default_sort_by != blank -%}
+              <input type="hidden" name="sort_by" value="{{ collection.sort_by | default: collection.default_sort_by }}">
+            {%- endif -%}
+
+            {%- for filter in collection.filters -%}
+              <div style="margin-bottom: 20px;">
+                <h4 style="font-weight: 600; margin-bottom: 10px; font-size: 14px; text-transform: uppercase;">{{ filter.label }}</h4>
+                {%- case filter.type -%}
+                  {%- when 'boolean' or 'list' -%}
+                    <ul style="list-style: none; padding: 0;">
+                      {%- for filter_value in filter.values -%}
+                        <li style="margin-bottom: 5px;">
+                          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox"
+                              name="{{ filter_value.param_name }}"
+                              value="{{ filter_value.value }}"
+                              {% if filter_value.active %}checked{% endif %}
+                              {% if filter_value.count == 0 and filter_value.active == false %}disabled{% endif %}
+                            >
+                            {{ filter_value.label }} ({{ filter_value.count }})
+                          </label>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- when 'price_range' -%}
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                      <input name="{{ filter.min_value.param_name }}"
+                        id="Filter-{{ filter.label | escape }}-GTE"
+                        type="number"
+                        placeholder="0"
+                        min="0"
+                        max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                        {%- if filter.min_value.value -%}
+                          value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                        {%- endif -%}
+                        style="width: 100%; padding: 5px;"
+                      >
+                      <span>-</span>
+                      <input name="{{ filter.max_value.param_name }}"
+                        id="Filter-{{ filter.label | escape }}-LTE"
+                        type="number"
+                        placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                        min="0"
+                        max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                        {%- if filter.max_value.value -%}
+                          value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                        {%- endif -%}
+                        style="width: 100%; padding: 5px;"
+                      >
+                    </div>
+                {%- endcase -%}
+              </div>
+            {%- endfor -%}
+            <noscript>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">Apply</button>
+            </noscript>
+          </form>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="collection-grid" style="flex: 1;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 1px solid var(--color-border);">
+            <div style="font-size: 14px; color: var(--color-text-light);">
+              Showing {{ paginate.current_offset | plus: 1 }}-{% if paginate.next %}{{ paginate.current_offset | plus: paginate.page_size }}{% else %}{{ paginate.items }}{% endif %} of {{ paginate.items }} products
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <label for="SortBy" style="font-size: 14px; font-weight: 600;">Sort by:</label>
+              <select name="sort_by" id="SortBy" style="padding: 5px 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius); background: transparent; font-family: var(--font-body);">
+                <option value="manual">Featured</option>
+                <option value="best-selling">Best selling</option>
+                <option value="price-ascending">Price, low to high</option>
+                <option value="price-descending">Price, high to low</option>
+                <option value="created-descending">Date, new to old</option>
+              </select>
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 30px;">
+            {%- for product in collection.products -%}
+              {% render 'product-card', product_card_product: product, show_secondary_image: true, show_vendor: true, show_rating: true %}
+            {%- endfor -%}
+          </div>
+          
+          {% render 'pagination', paginate: paginate %}
+        </div>
+        
+      </div>
+    {%- endpaginate -%}
+  </div>
+</div>
+<style>
+  @media (max-width: 767px) {
+    .collection-product-grid > .container > div { flex-direction: column; }
+    .collection-filters { flex: none !important; width: 100%; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterForm = document.querySelector('.filter-form');
+    const sortSelect = document.getElementById('SortBy');
+    
+    if (filterForm) {
+      const inputs = filterForm.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        input.addEventListener('change', () => {
+          filterForm.submit();
+        });
+      });
+    }
+
+    if (sortSelect && filterForm) {
+      sortSelect.addEventListener('change', () => {
+        let hiddenSort = filterForm.querySelector('input[name="sort_by"]');
+        if(!hiddenSort) {
+          hiddenSort = document.createElement('input');
+          hiddenSort.type = 'hidden';
+          hiddenSort.name = 'sort_by';
+          filterForm.appendChild(hiddenSort);
+        }
+        hiddenSort.value = sortSelect.value;
+        filterForm.submit();
+      });
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      if(urlParams.has('sort_by')) {
+        sortSelect.value = urlParams.get('sort_by');
+      }
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Grid",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    }
+  ]
+}
+{% endschema %}

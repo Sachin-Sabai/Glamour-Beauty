@@ -1,0 +1,98 @@
+<div class="email-signup-section" style="position: relative; padding: 60px 20px; text-align: center; color: #fff;">
+  {%- if section.settings.image != blank -%}
+    {{ section.settings.image | image_url: width: 2000 | image_tag: loading: 'lazy', style: 'position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;', sizes: '100vw' }}
+  {%- else -%}
+    <img src="{{ 'newsletter_bg.png' | asset_url }}" alt="" width="2000" height="800" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
+  {%- endif -%}
+  
+  <div style="position: absolute; inset: 0; background-color: {{ section.settings.overlay_color }}; opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}; z-index: 2;"></div>
+  
+  <div class="container" style="position: relative; z-index: 3; max-width: 600px; margin: 0 auto;">
+    {%- if section.settings.heading != blank -%}
+      <h2 style="font-size: clamp(32px, 5vw, 48px); margin-bottom: 15px;">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    
+    {%- if section.settings.subtext != blank -%}
+      <p style="font-size: 18px; margin-bottom: 10px; opacity: 0.9;">{{ section.settings.subtext }}</p>
+    {%- endif -%}
+    
+    {%- if section.settings.offer_text != blank -%}
+      <p style="font-weight: bold; font-size: 16px; margin-bottom: 30px; letter-spacing: 1px; text-transform: uppercase;">{{ section.settings.offer_text }}</p>
+    {%- endif -%}
+    
+    {%- form 'customer', id: 'email-signup-banner-form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <input type="email" name="contact[email]" placeholder="Your email address" required style="flex-grow: 1; padding: 15px 20px; border: none; border-radius: var(--border-radius); font-size: 16px; width: 100%; min-width: 250px;">
+        <button type="submit" class="btn btn-primary" style="flex-shrink: 0; width: 100%;">{{ section.settings.btn_label }}</button>
+        <style>@media (min-width: 480px) { #email-signup-banner-form button { width: auto; } }</style>
+      </div>
+      {%- if form.posted_successfully? -%}
+        <p style="margin-top: 15px; color: #4BB543; font-weight: bold;">{{ section.settings.success_message }}</p>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Email Signup Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "default": 40,
+      "label": "Overlay Opacity %"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join the Glamour Club"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Sign up to receive updates, access to exclusive deals, and more."
+    },
+    {
+      "type": "text",
+      "id": "offer_text",
+      "label": "Offer Text",
+      "default": "Get 10% off your first order"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success Message",
+      "default": "Thanks for subscribing! Check your inbox for your code."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Email Signup Banner"
+    }
+  ]
+}
+{% endschema %}

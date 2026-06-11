@@ -1,0 +1,44 @@
+{%- if predictive_search.performed -%}
+  <div id="predictive-search-results">
+    {%- if predictive_search.resources.products.size > 0 -%}
+      <h3 id="predictive-search-products" class="predictive-search__heading" style="font-size: 14px; text-transform: uppercase; color: var(--color-text-light); margin-bottom: 10px; padding: 0 20px;">
+        Products
+      </h3>
+      <ul id="predictive-search-results-list" class="predictive-search__results-list" role="listbox" aria-labelledby="predictive-search-products" style="list-style: none; padding: 0; margin: 0;">
+        {%- for product in predictive_search.resources.products -%}
+          <li id="predictive-search-option-{{ forloop.index }}" class="predictive-search__list-item" role="option" aria-selected="false">
+            <a href="{{ product.url }}" class="predictive-search__item" tabindex="-1" style="display: flex; align-items: center; gap: 15px; padding: 10px 20px; text-decoration: none; color: var(--color-text);">
+              {%- if product.featured_media != blank -%}
+                <img class="predictive-search__image"
+                  src="{{ product.featured_media | image_url: width: 50 }}"
+                  alt="{{ product.featured_media.alt }}"
+                  width="50"
+                  height="50"
+                  style="border-radius: var(--border-radius); object-fit: cover;"
+                >
+              {%- endif -%}
+              <div class="predictive-search__item-content">
+                <span class="predictive-search__item-heading" style="display: block; font-weight: 500;">{{ product.title }}</span>
+                {%- if section.settings.show_price -%}
+                  <span class="predictive-search__item-price" style="font-size: 14px; color: var(--color-text-light);">
+                    {% render 'price', product: product %}
+                  </span>
+                {%- endif -%}
+              </div>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <div class="predictive-search__loading-state" aria-hidden="true" style="display: none;">
+      <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
+
+    <button type="submit" tabindex="-1" class="predictive-search__item predictive-search__item--term btn" style="width: calc(100% - 40px); margin: 20px;">
+      Search for “{{ predictive_search.terms }}”
+    </button>
+  </div>
+{%- endif -%}

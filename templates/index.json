@@ -1,0 +1,75 @@
+{
+  "sections": {
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {
+        "btn1_collection": "best-sellers"
+      }
+    },
+    "marquee-strip": {
+      "type": "marquee-strip",
+      "settings": {}
+    },
+    "featured-categories": {
+      "type": "featured-categories",
+      "settings": {}
+    },
+    "infinite-carousel": {
+      "type": "infinite-carousel",
+      "settings": {
+        "mode": "products"
+      }
+    },
+    "product-grid": {
+      "type": "product-grid",
+      "settings": {}
+    },
+    "before-after-slider": {
+      "type": "before-after-slider",
+      "settings": {}
+    },
+    "ingredients-highlight": {
+      "type": "ingredients-highlight",
+      "settings": {}
+    },
+    "testimonials-carousel": {
+      "type": "testimonials-carousel",
+      "settings": {}
+    },
+    "how-it-works": {
+      "type": "how-it-works",
+      "settings": {}
+    },
+    "brand-story": {
+      "type": "brand-story",
+      "settings": {}
+    },
+    "instagram-feed": {
+      "type": "instagram-feed",
+      "settings": {}
+    },
+    "trust-badges": {
+      "type": "trust-badges",
+      "settings": {}
+    },
+    "email-signup-banner": {
+      "type": "email-signup-banner",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero-banner",
+    "marquee-strip",
+    "featured-categories",
+    "infinite-carousel",
+    "product-grid",
+    "before-after-slider",
+    "ingredients-highlight",
+    "testimonials-carousel",
+    "how-it-works",
+    "brand-story",
+    "instagram-feed",
+    "trust-badges",
+    "email-signup-banner"
+  ]
+}

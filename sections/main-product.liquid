@@ -1,0 +1,139 @@
+<div class="product-template" style="padding: 40px 0; background: var(--color-bg);">
+  <div class="container">
+    {% render 'breadcrumb' %}
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 40px;">
+      
+      <!-- Media Gallery -->
+      <div class="product-media staggered-gallery" style="flex: 1.5; min-width: 300px;">
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; position: relative;">
+          {%- for media in product.media -%}
+            <div class="product-main-image {% if forloop.first %}col-span-2{% endif %}" style="{% if forloop.first %}grid-column: span 2;{% endif %} border-radius: var(--border-radius); overflow: hidden; position: relative;">
+              <img width="800" height="800" src="{{ media | image_url: width: 1000 }}" alt="{{ media.alt | escape }}" style="width: 100%; height: auto; display: block;" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+              {%- if forloop.first -%}
+                {% render 'product-badge', product: product %}
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+        <style>
+          @media (max-width: 767px) {
+            .staggered-gallery > div { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; grid-template-columns: none !important; }
+            .staggered-gallery > div > div { flex: 0 0 100%; scroll-snap-align: start; }
+          }
+        </style>
+      </div>
+      
+      <!-- Product Info -->
+      <div class="product-info" style="flex: 1; min-width: 300px; position: sticky; top: 100px; align-self: start;">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+            {%- when 'vendor' -%}
+              <div class="product-vendor" {{ block.shopify_attributes }} style="margin-bottom: 15px; font-size: 14px; color: var(--color-text-light); text-transform: uppercase; letter-spacing: 1px;">{{ product.vendor }}</div>
+            {%- when 'title' -%}
+              <h1 class="product-title" {{ block.shopify_attributes }} style="font-size: clamp(32px, 4vw, 42px); margin-bottom: 15px;">{{ product.title }}</h1>
+            {%- when 'price' -%}
+              <div class="product-price-wrapper" {{ block.shopify_attributes }} style="font-size: 24px; font-weight: 500; margin-bottom: 20px; color: var(--color-primary);">
+                {% render 'price', product: product %}
+                {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
+                  <div class="unit-price" style="font-size: 14px; color: var(--color-text-light); margin-top: 5px;">
+                    {{ product.selected_or_first_available_variant.unit_price | money }} / 
+                    {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+                      {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+                    {%- endif -%}
+                    {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- when 'description' -%}
+              <div class="product-description" {{ block.shopify_attributes }} style="font-size: 16px; color: var(--color-text-light); line-height: 1.6; margin-bottom: 30px;">
+                {{ product.description }}
+              </div>
+            {%- when 'variant_picker' -%}
+              <div class="product-variant-picker" {{ block.shopify_attributes }}>
+                {% render 'variant-picker', product: product %}
+              </div>
+            {%- when 'buy_buttons' -%}
+              <div class="product-buy-buttons" {{ block.shopify_attributes }} style="margin-bottom: 30px;">
+                {%- form 'product', product, id: 'product-form-main', class: 'product-form' -%}
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  {{ form | payment_terms }}
+                  
+                  <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 600;">Quantity</label>
+                    {% render 'quantity-selector', value: 1 %}
+                  </div>
+                  
+                  <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px;">
+                    <button type="submit" name="add" class="btn btn-primary" style="flex: 1; min-width: 200px;" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+                      {% if product.selected_or_first_available_variant.available %}
+                        {{ 'cart.general.add_to_cart' | t }}
+                      {% else %}
+                        {{ 'products.product.out_of_stock' | t }}
+                      {% endif %}
+                    </button>
+                    {{ form | payment_button }}
+                  </div>
+                {%- endform -%}
+
+                <!-- Pickup Availability -->
+                {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+                {%- if pick_up_availabilities.size > 0 -%}
+                  <div class="pickup-availability" style="margin-top: 20px; padding: 15px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+                    <div style="display: flex; gap: 10px; align-items: flex-start;">
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                      <div>
+                        <p style="font-weight: 600; margin-bottom: 5px;">Pickup available at {{ pick_up_availabilities.first.location.name }}</p>
+                        <p style="font-size: 14px; color: var(--color-text-light);">Usually ready in {{ pick_up_availabilities.first.pick_up_time }}</p>
+                      </div>
+                    </div>
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- when 'collapsible_tab' -%}
+              <div class="accordion-item" {{ block.shopify_attributes }}>
+                <div class="accordion-title">
+                  {{ block.settings.heading | default: block.settings.page.title }}
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+                <div class="accordion-content">
+                  <div class="accordion-content-inner">
+                    {{ block.settings.content }}
+                    {{ block.settings.page.content }}
+                  </div>
+                </div>
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Information",
+  "settings": [],
+  "blocks": [
+    { "type": "@app" },
+    { "type": "vendor", "name": "Vendor", "limit": 1 },
+    { "type": "title", "name": "Title", "limit": 1 },
+    { "type": "price", "name": "Price", "limit": 1 },
+    { "type": "variant_picker", "name": "Variant Picker", "limit": 1 },
+    { "type": "buy_buttons", "name": "Buy Buttons", "limit": 1 },
+    { "type": "description", "name": "Description", "limit": 1 },
+    {
+      "type": "collapsible_tab",
+      "name": "Collapsible Row",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Collapsible Row" },
+        { "type": "richtext", "id": "content", "label": "Content" },
+        { "type": "page", "id": "page", "label": "Page Content" }
+      ]
+    }
+  ]
+}
+{% endschema %}

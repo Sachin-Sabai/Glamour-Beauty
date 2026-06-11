@@ -1,0 +1,20 @@
+{% comment %} theme-check-disable {% endcomment %}
+<div class="quantity-selector" style="display: inline-flex; align-items: center; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+  <button type="button" class="qty-minus qty-btn" data-cart-quantity-minus {% if line %}data-line="{{ line }}"{% endif %} style="padding: 10px 15px; background: transparent; border: none; cursor: pointer; color: var(--color-text); font-size: 18px;">&minus;</button>
+  <input type="number" 
+         name="quantity" 
+         class="qty-input" 
+         value="{{ value | default: 1 }}" 
+         min="1" 
+         max="99" 
+         {% if line %}data-line="{{ line }}"{% endif %}
+         style="width: 50px; text-align: center; border: none; background: transparent; padding: 10px 0; -moz-appearance: textfield;">
+  <button type="button" class="qty-plus qty-btn" data-cart-quantity-plus {% if line %}data-line="{{ line }}"{% endif %} style="padding: 10px 15px; background: transparent; border: none; cursor: pointer; color: var(--color-text); font-size: 18px;">&plus;</button>
+  <style>
+    .qty-input::-webkit-outer-spin-button,
+    .qty-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
+</div>

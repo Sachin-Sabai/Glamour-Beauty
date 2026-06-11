@@ -1,0 +1,36 @@
+<article class="article-template" style="padding: 40px 0; background: var(--color-bg);">
+  <div class="container" style="max-width: 800px; margin: 0 auto;">
+    <header style="text-align: center; margin-bottom: 40px;">
+      <div style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-primary); margin-bottom: 15px;">
+        {{ article.published_at | time_tag: format: 'date' }} | By {{ article.author }}
+      </div>
+      <h1 style="font-size: clamp(36px, 5vw, 54px); margin-bottom: 30px;">{{ article.title }}</h1>
+      
+      {%- if article.image -%}
+        <div style="border-radius: var(--border-radius); overflow: hidden; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+          <img width="400" height="400" src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.image.alt | escape }}" loading="lazy" style="width: 100%; height: auto; display: block;">
+        </div>
+      {%- endif -%}
+    </header>
+
+    <div class="rte" style="line-height: 1.8; font-size: 18px; color: var(--color-text);">
+      {{ article.content }}
+    </div>
+
+    <div style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--color-border); text-align: center;">
+      <p style="font-weight: 600; margin-bottom: 15px;">Share this article</p>
+      <div style="display: flex; justify-content: center; gap: 15px;">
+        <a href="https://www.facebook.com/sharer.php?u={{ shop.url | append: article.url }}" target="_blank" rel="noopener" class="btn btn-outline" style="padding: 10px 20px;">Facebook</a>
+        <a href="https://twitter.com/share?text={{ article.title | url_param_escape }}&url={{ shop.url | append: article.url }}" target="_blank" rel="noopener" class="btn btn-outline" style="padding: 10px 20px;">Twitter</a>
+        <a href="https://pinterest.com/pin/create/button/?url={{ shop.url | append: article.url }}&media={{ article.image | image_url: width: 1024 }}&description={{ article.title | url_param_escape }}" target="_blank" rel="noopener" class="btn btn-outline" style="padding: 10px 20px;">Pinterest</a>
+      </div>
+    </div>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article Layout",
+  "settings": []
+}
+{% endschema %}

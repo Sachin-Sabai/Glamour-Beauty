@@ -1,0 +1,220 @@
+{
+  "current": {
+    "color_primary": "#9a1845",
+    "color_secondary": "#C68A4D",
+    "color_accent": "#FFF4F4",
+    "color_bg": "#FFFFFF",
+    "color_text": "#2C2C2C",
+    "color_text_light": "#888888",
+    "color_border": "#F0E4E4",
+    "color_button_text": "#FFFFFF",
+    "border_radius": 4,
+    "enable_cart_drawer": true,
+    "show_order_note": false,
+    "free_shipping_threshold": "701",
+    "contact_email": "hello@glamourbeauty.com",
+    "contact_phone": "+1 (555) 123-4567",
+    "contact_address": "123 Beauty Ave, New York, NY 10001",
+    "contact_hours": "Mon-Fri: 9am - 6pm\nSat: 10am - 4pm",
+    "sections": {
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {
+          "show_announcement": true,
+          "bg_color": "#9a1845",
+          "text_color": "#FFFFFF"
+        },
+        "blocks": {
+          "announcement_1": {
+            "type": "announcement",
+            "settings": {
+              "text": "100% Secure Delivery",
+              "link": ""
+            }
+          },
+          "announcement_2": {
+            "type": "announcement",
+            "settings": {
+              "text": "Join our Club and get 15% OFF your first order!",
+              "link": ""
+            }
+          },
+          "announcement_3": {
+            "type": "announcement",
+            "settings": {
+              "text": "Free Delivery on orders above ₹999",
+              "link": ""
+            }
+          }
+        },
+        "block_order": [
+          "announcement_1",
+          "announcement_2",
+          "announcement_3"
+        ]
+      },
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo_width": 150,
+          "menu": "main-menu",
+          "bg_color": "#FFFFFF",
+          "sticky_header": true,
+          "search_placeholder": "Search for beauty products..."
+        }
+      },
+      "hero_banner": {
+        "type": "hero-banner",
+        "settings": {
+          "bg_color": "#FFF4F4",
+          "min_height": 600,
+          "eyebrow": "Unleash Your",
+          "heading": "Natural Beauty",
+          "text": "Discover our new collection of organic skincare products designed to nourish and rejuvenate your skin.",
+          "btn1_label": "Shop Now →",
+          "btn1_link": "shopify:\/\/collections\/all",
+          "btn2_label": "Explore Collection",
+          "btn2_link": "shopify:\/\/collections\/all",
+          "show_badge": true,
+          "badge_text": "✨ New Arrivals"
+        }
+      },
+      "trust_badges": {
+        "type": "trust-badges",
+        "settings": {
+          "bg_color": "#FFFFFF"
+        },
+        "blocks": {
+          "badge_1": {
+            "type": "badge",
+            "settings": {
+              "emoji": "🛡️",
+              "title": "100% Original Products",
+              "subtext": ""
+            }
+          },
+          "badge_2": {
+            "type": "badge",
+            "settings": {
+              "emoji": "🚚",
+              "title": "Free Shipping",
+              "subtext": "Above ₹999"
+            }
+          },
+          "badge_3": {
+            "type": "badge",
+            "settings": {
+              "emoji": "🔄",
+              "title": "Easy Returns & Refunds",
+              "subtext": ""
+            }
+          },
+          "badge_4": {
+            "type": "badge",
+            "settings": {
+              "emoji": "🔒",
+              "title": "Secure Payments",
+              "subtext": ""
+            }
+          }
+        },
+        "block_order": [
+          "badge_1",
+          "badge_2",
+          "badge_3",
+          "badge_4"
+        ]
+      },
+      "featured_categories": {
+        "type": "featured-categories",
+        "settings": {
+          "heading": "Shop by Category",
+          "subheading": "Essentials"
+        },
+        "blocks": {
+          "cat_1": {
+            "type": "category",
+            "settings": {
+              "title": "Skincare",
+              "link": "shopify:\/\/collections\/all"
+            }
+          },
+          "cat_2": {
+            "type": "category",
+            "settings": {
+              "title": "Makeup",
+              "link": "shopify:\/\/collections\/all"
+            }
+          },
+          "cat_3": {
+            "type": "category",
+            "settings": {
+              "title": "Haircare",
+              "link": "shopify:\/\/collections\/all"
+            }
+          },
+          "cat_4": {
+            "type": "category",
+            "settings": {
+              "title": "Fragrance",
+              "link": "shopify:\/\/collections\/all"
+            }
+          },
+          "cat_5": {
+            "type": "category",
+            "settings": {
+              "title": "Bath & Body",
+              "link": "shopify:\/\/collections\/all"
+            }
+          },
+          "cat_6": {
+            "type": "category",
+            "settings": {
+              "title": "Accessories",
+              "link": "shopify:\/\/collections\/all"
+            }
+          }
+        },
+        "block_order": [
+          "cat_1",
+          "cat_2",
+          "cat_3",
+          "cat_4",
+          "cat_5",
+          "cat_6"
+        ]
+      },
+      "promo_banner": {
+        "type": "promo-banner",
+        "settings": {
+          "bg_color": "#FFFFFF",
+          "subheading": "Special Offer",
+          "heading": "Up to 30% OFF on Bestsellers",
+          "text": "Treat yourself to our top-rated beauty essentials at unbeatable prices.",
+          "btn_label": "Shop Sale Now",
+          "btn_link": "shopify:\/\/collections\/all"
+        }
+      },
+      "customer_reviews": {
+        "type": "customer-reviews",
+        "settings": {
+          "bg_color": "#FFF4F4"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "bg_color": "#FFFFFF",
+          "text_color": "#2C2C2C"
+        }
+      }
+    },
+    "content_for_index": [
+      "hero_banner",
+      "trust_badges",
+      "featured_categories",
+      "promo_banner",
+      "customer_reviews"
+    ]
+  }
+}

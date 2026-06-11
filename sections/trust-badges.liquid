@@ -1,0 +1,78 @@
+<div class="trust-badges-section" style="padding: 40px 0; background-color: {{ section.settings.bg_color }}; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+  <div class="container">
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; align-items: flex-start;">
+      {%- for block in section.blocks -%}
+        <div class="trust-badge-item" {{ block.shopify_attributes }} style="display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 150px; flex: 1; min-width: 120px;">
+          <div style="font-size: 32px; margin-bottom: 10px; color: var(--color-primary);">
+            {%- if block.settings.image != blank -%}
+              <img width="400" height="400" src="{{ block.settings.image | image_url: width: 80 }}" alt="{{ block.settings.title }}" style="width: 40px; height: 40px; object-fit: contain;">
+            {%- else -%}
+              {{ block.settings.emoji }}
+            {%- endif -%}
+          </div>
+          <h4 style="font-family: var(--font-body); font-weight: 600; font-size: 14px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">{{ block.settings.title }}</h4>
+          {%- if block.settings.subtext != blank -%}
+            <p style="font-size: 12px; color: var(--color-text-light);">{{ block.settings.subtext }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Trust Badges",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icon Image (Overrides Emoji)"
+        },
+        {
+          "type": "text",
+          "id": "emoji",
+          "label": "Emoji Icon",
+          "default": "✨"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Free Shipping"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext",
+          "default": "On orders over $50"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Badges",
+      "blocks": [
+        { "type": "badge", "settings": { "emoji": "🚚", "title": "Free Shipping", "subtext": "Orders over $50" } },
+        { "type": "badge", "settings": { "emoji": "🔄", "title": "Easy Returns", "subtext": "30-day return policy" } },
+        { "type": "badge", "settings": { "emoji": "🔒", "title": "Secure Payment", "subtext": "100% safe checkout" } },
+        { "type": "badge", "settings": { "emoji": "🛡️", "title": "Authentic", "subtext": "100% original products" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

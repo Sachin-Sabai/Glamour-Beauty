@@ -1,0 +1,127 @@
+<div class="testimonials-section" style="padding: 40px 0; background-color: {{ section.settings.bg_color }};">
+  <div class="container">
+    <div class="carousel" data-slides="1" data-speed="{{ section.settings.autoplay_speed | times: 1000 }}">
+      <div class="carousel-inner">
+        {%- for block in section.blocks -%}
+          <div class="carousel-slide" {{ block.shopify_attributes }}>
+            <div class="testimonial-card" style="text-align: center; max-width: 800px; margin: 0 auto; padding: 20px;">
+              
+              <div style="margin-bottom: 20px;">
+                {% render 'star-rating', rating: block.settings.rating %}
+              </div>
+              
+              <h3 style="font-family: var(--font-heading); font-size: clamp(24px, 3vw, 32px); margin-bottom: 30px; font-style: italic; line-height: 1.4;">"{{ block.settings.review_text }}"</h3>
+              
+              <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                {%- if block.settings.photo != blank -%}
+                  <img width="400" height="400" src="{{ block.settings.photo | image_url: width: 100 }}" alt="{{ block.settings.author }}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                {%- endif -%}
+                <div style="text-align: left;">
+                  <div style="font-weight: 600; display: flex; align-items: center; gap: 5px;">
+                    {{ block.settings.author }}
+                    {%- if block.settings.verified -%}
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="var(--color-primary)"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    {%- endif -%}
+                  </div>
+                  {%- if block.settings.location != blank -%}
+                    <div style="font-size: 12px; color: var(--color-text-light);">{{ block.settings.location }}</div>
+                  {%- endif -%}
+                  {%- if block.settings.product_name != blank -%}
+                    <div style="font-size: 12px; font-weight: 500; margin-top: 5px; color: var(--color-accent);">{{ block.settings.product_name }}</div>
+                  {%- endif -%}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+      <div class="carousel-dots"></div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials Carousel",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#F7E7CE"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay Speed",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Star Rating",
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "review_text",
+          "label": "Review Text",
+          "default": "This product completely transformed my skin. I can't recommend it enough!"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo",
+          "label": "Reviewer Photo"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Reviewer Name",
+          "default": "Sarah M."
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "New York, NY"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Show Verified Badge",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "product_name",
+          "label": "Product Name (Optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials Carousel",
+      "blocks": [
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" }
+      ]
+    }
+  ]
+}
+{% endschema %}

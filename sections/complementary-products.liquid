@@ -1,0 +1,71 @@
+<div class="complementary-products" style="padding: 40px 0;">
+  <div class="container">
+    <div style="text-align: center; margin-bottom: 30px;">
+      <h2 style="font-family: var(--font-heading); font-size: 28px;">{{ section.settings.heading }}</h2>
+    </div>
+
+    <!-- Product Recommendations using Shopify's Recommendations API -->
+    <product-recommendations class="complementary-products-grid" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}&intent=complementary">
+      {%- if recommendations.performed and recommendations.products_count > 0 -%}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+          {%- for product in recommendations.products -%}
+            {% render 'product-card', product_card_product: product %}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </product-recommendations>
+  </div>
+</div>
+
+<script>
+  class ProductRecommendations extends HTMLElement {
+    constructor() {
+      super();
+
+      fetch(this.dataset.url)
+        .then(response => response.text())
+        .then(text => {
+          const html = document.createElement('div');
+          html.innerHTML = text;
+          const recommendations = html.querySelector('product-recommendations');
+
+          if (recommendations && recommendations.innerHTML.trim().length) {
+            this.innerHTML = recommendations.innerHTML;
+          }
+        })
+        .catch(e => {
+          console.error(e);
+        });
+    }
+  }
+
+  customElements.define('product-recommendations', ProductRecommendations);
+</script>
+
+{% schema %}
+{
+  "name": "Complementary Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Pairs well with",
+      "label": "Heading"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "label": "Maximum products to show"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Complementary Products"
+    }
+  ]
+}
+{% endschema %}

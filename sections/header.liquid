@@ -1,0 +1,225 @@
+<div class="site-header{% if section.settings.sticky_header %} js-sticky-header{% endif %}" style="background-color: {{ section.settings.bg_color }};">
+  <div class="container" style="display: flex; align-items: center; justify-content: space-between; padding-top: 15px; padding-bottom: 15px; position: relative;">
+    
+    <!-- Desktop Nav -->
+    <nav style="flex: 1; display: none;" class="show-desktop desktop-nav">
+      <ul style="display: flex; gap: 25px; font-weight: 500; font-size: 15px; margin: 0; padding: 0; list-style: none;">
+        {%- for link in linklists[section.settings.menu].links -%}
+          <li style="position: relative;" class="nav-item">
+            <a href="{{ link.url }}" style="padding: 10px 0; display: block; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; color: inherit;">
+              {{ link.title }}
+              {%- if link.links != blank -%}
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 5px;"><path d="M6 9l6 6 6-6"/></svg>
+              {%- endif -%}
+            </a>
+            {%- if link.links != blank -%}
+              <div class="mega-menu" style="display: none; position: absolute; top: 100%; left: -50px; background: var(--color-bg); width: max-content; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 100; border-radius: 0 0 12px 12px; border-top: 2px solid var(--color-primary);">
+                <div style="display: flex; gap: 40px;">
+                  {%- for child_link in link.links -%}
+                    <div class="mega-menu-column">
+                      <a href="{{ child_link.url }}" style="display: block; font-weight: 600; text-transform: uppercase; margin-bottom: 15px; text-decoration: none; color: var(--color-text); letter-spacing: 1px; font-size: 14px;">{{ child_link.title }}</a>
+                      {%- if child_link.links != blank -%}
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                          {%- for grandchild_link in child_link.links -%}
+                            <li style="margin-bottom: 10px;">
+                              <a href="{{ grandchild_link.url }}" style="text-decoration: none; color: var(--color-text-light); transition: color 0.3s ease; font-size: 14px;" class="mega-menu-link">{{ grandchild_link.title }}</a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                  {%- if section.settings.mega_menu_image != blank and forloop.first -%}
+                    <div class="mega-menu-promo" style="width: 250px; border-left: 1px solid var(--color-border); padding-left: 40px;">
+                      <a href="{{ section.settings.mega_menu_url | default: '#' }}" style="display: block; text-decoration: none;">
+                        <img width="300" height="300" src="{{ section.settings.mega_menu_image | image_url: width: 300 }}" alt="{{ section.settings.mega_menu_title }}" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px;">
+                        <span style="display: block; font-weight: 600; color: var(--color-text); margin-bottom: 5px;">{{ section.settings.mega_menu_title }}</span>
+                        <span style="display: block; font-size: 13px; color: var(--color-primary); text-transform: uppercase; font-weight: 600;">Shop Now &rarr;</span>
+                      </a>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+      <style>
+        .nav-item:hover .mega-menu { display: block !important; }
+        .mega-menu-link:hover { color: var(--color-primary) !important; }
+        @media (min-width: 1024px) { .show-desktop { display: block !important; } .hide-desktop { display: none !important; } }
+      </style>
+    </nav>
+
+    <!-- Mobile Menu Toggle -->
+    <div style="flex: 1; display: flex; align-items: center;" class="hide-desktop">
+      <button class="js-mobile-menu-toggle" aria-label="Menu" style="background: transparent; border: none; cursor: pointer; color: var(--color-text);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <button class="js-search-toggle" aria-label="Search" style="background: transparent; border: none; cursor: pointer; color: var(--color-text); margin-left: 15px;">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+    </div>
+
+    <!-- Logo -->
+    <div style="text-align: center; flex: 1; display: flex; justify-content: center; align-items: center;">
+      <a href="{{ routes.root_url }}" style="display: inline-block; text-decoration: none; position: relative;">
+        {%- if section.settings.logo != blank -%}
+          <img width="400" height="400" src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ shop.name }}" style="max-width: {{ section.settings.logo_width }}px; display: block;">
+        {%- else -%}
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <svg style="width: 24px; height: 24px; margin-bottom: -5px; fill: var(--color-primary);" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+            <span style="font-family: var(--font-heading); font-size: 32px; font-weight: 600; color: var(--color-text); letter-spacing: 1px;">Glamour<span style="color: var(--color-primary);">Beauty</span></span>
+          </div>
+        {%- endif -%}
+      </a>
+    </div>
+
+    <!-- Icons -->
+    <div style="flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 20px;">
+      <button class="js-search-toggle show-desktop" aria-label="Search" style="background: transparent; border: none; cursor: pointer; color: var(--color-text); display: none;">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+
+      {%- if shop.customer_accounts_enabled -%}
+        <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" style="color: var(--color-text);" class="show-desktop" style="display: none;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </a>
+      {%- endif -%}
+
+      <a href="{{ routes.cart_url }}" class="js-cart-toggle" style="color: var(--color-text); position: relative; display: flex; align-items: center;">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span class="cart-count-badge" style="position: absolute; top: -5px; right: -8px; background: var(--color-primary); color: #fff; font-size: 10px; font-weight: bold; height: 16px; min-width: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 0 4px;">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Search Dropdown -->
+  <div class="search-bar" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--color-bg); padding: 20px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 99;">
+    <div class="container">
+      <predictive-search>
+        <form action="{{ routes.search_url }}" method="get" role="search" style="position: relative; display: flex; flex-direction: column;">
+          <div style="position: relative; display: flex;">
+            <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ section.settings.search_placeholder }}" class="search-bar__input form-input" style="font-size: 20px; padding-right: 40px; border-bottom-color: var(--color-text); width: 100%;"
+              role="combobox"
+              aria-expanded="false"
+              aria-owns="predictive-search-results"
+              aria-controls="predictive-search-results"
+              aria-haspopup="listbox"
+              aria-autocomplete="list"
+            >
+            <input name="options[prefix]" type="hidden" value="last">
+            <button type="submit" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer;">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </div>
+          <div id="predictive-search" tabindex="-1" style="background: var(--color-bg); position: absolute; top: 100%; left: 0; right: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 0 0 var(--border-radius) var(--border-radius); z-index: 100;"></div>
+        </form>
+      </predictive-search>
+    </div>
+    <style>.search-bar.active { display: block !important; }</style>
+  </div>
+</div>
+
+<!-- Mobile Menu Drawer -->
+<div class="mobile-menu-drawer" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-bg); z-index: 1000; transform: translateX(-100%); transition: transform 0.3s ease; display: flex; flex-direction: column;">
+  <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--color-border);">
+    <span style="font-family: var(--font-heading); font-size: 24px; font-weight: 600;">Menu</span>
+    <button class="js-mobile-menu-toggle" aria-label="Close menu" style="background: transparent; border: none; cursor: pointer;">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div style="padding: 20px; overflow-y: auto; flex-grow: 1;">
+    <ul style="font-size: 18px; font-weight: 500;">
+      {%- for link in linklists[section.settings.menu].links -%}
+        <li style="margin-bottom: 15px;">
+          <a href="{{ link.url }}" style="display: block;">{{ link.title }}</a>
+          {%- if link.links != blank -%}
+            <ul style="padding-left: 15px; margin-top: 10px; font-size: 16px; font-weight: 400;">
+              {%- for child_link in link.links -%}
+                <li style="margin-bottom: 10px;"><a href="{{ child_link.url }}" style="display: block; color: var(--color-text-light);">{{ child_link.title }}</a></li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+    
+    {%- if shop.customer_accounts_enabled -%}
+      <div style="margin-top: 40px; border-top: 1px solid var(--color-border); padding-top: 20px;">
+        <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" style="display: flex; align-items: center; gap: 10px;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          {%- if customer -%}Account{%- else -%}Log in{%- endif -%}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+<style>.mobile-menu-drawer.active { transform: translateX(0) !important; }</style>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "default": 100,
+      "unit": "px",
+      "label": "Custom logo width"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Main Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Enable sticky header",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search Placeholder Text",
+      "default": "Search products..."
+    },
+    {
+      "type": "header",
+      "content": "Mega Menu Promotion"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_menu_image",
+      "label": "Promotion Image"
+    },
+    {
+      "type": "text",
+      "id": "mega_menu_title",
+      "label": "Promotion Title",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "url",
+      "id": "mega_menu_url",
+      "label": "Promotion Link"
+    }
+  ]
+}
+{% endschema %}

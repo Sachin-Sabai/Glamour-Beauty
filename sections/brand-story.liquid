@@ -1,0 +1,117 @@
+<div class="brand-story-section" style="padding: 40px 0; background-color: {{ section.settings.bg_color }};">
+  <div class="container">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 40px; {% if section.settings.layout == 'right' %}flex-direction: row-reverse;{% endif %}">
+      
+      <div style="flex: 1; min-width: 300px;">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', style: 'width: 100%; max-height: 400px; object-fit: cover; border-radius: var(--border-radius); box-shadow: 0 15px 30px rgba(0,0,0,0.1);', sizes: '(max-width: 767px) 100vw, 50vw' }}
+        {%- else -%}
+          <img src="{{ 'brand_philosophy.png' | asset_url }}" alt="Brand Philosophy" width="800" height="800" loading="lazy" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: var(--border-radius); box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
+        {%- endif -%}
+      </div>
+
+      <div style="flex: 1; min-width: 300px;">
+        {%- if section.settings.heading != blank -%}
+          <h2 style="font-size: clamp(32px, 4vw, 48px); margin-bottom: 20px;">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        
+        {%- if section.settings.text != blank -%}
+          <div style="font-size: 16px; line-height: 1.6; color: var(--color-text-light); margin-bottom: 30px;">
+            {{ section.settings.text }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.blocks.size > 0 -%}
+          <ul style="margin-bottom: 30px; display: grid; gap: 15px;">
+            {%- for block in section.blocks -%}
+              <li style="display: flex; align-items: center; gap: 10px; font-weight: 500;" {{ block.shopify_attributes }}>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--color-primary)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                {{ block.settings.text }}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if section.settings.btn_label != blank -%}
+          <a href="{{ section.settings.btn_link | default: '/?view=our-story' }}" class="btn btn-primary">{{ section.settings.btn_label }}</a>
+        {%- endif -%}
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Brand Story",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FDFAF6"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Image Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Philosophy"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>We believe that beauty should be uncompromising. That's why we source the finest natural ingredients to create formulations that deliver visible results without harsh chemicals.</p>"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label",
+      "default": "Read Our Story"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "bullet",
+      "name": "Bullet Point",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Story",
+      "blocks": [
+        { "type": "bullet", "settings": { "text": "Cruelty-free & Vegan" } },
+        { "type": "bullet", "settings": { "text": "Dermatologist Tested" } },
+        { "type": "bullet", "settings": { "text": "Sustainably Sourced" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

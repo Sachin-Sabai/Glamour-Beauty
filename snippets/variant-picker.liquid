@@ -1,0 +1,36 @@
+{% comment %} theme-check-disable {% endcomment %}
+{%- unless product.has_only_default_variant -%}
+  <variant-selects class="variant-selector" style="margin: 20px 0; display: block;" data-section="{{ section.id }}" data-url="{{ product.url }}">
+    {%- for option in product.options_with_values -%}
+      <fieldset style="border: none; padding: 0; margin-bottom: 15px;">
+        <legend style="font-weight: 600; margin-bottom: 8px;">{{ option.name }}</legend>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          {%- for value in option.values -%}
+            <label style="cursor: pointer;">
+              <input type="radio" 
+                     name="{{ option.name }}" 
+                     value="{{ value | escape }}" 
+                     form="product-form-{{ product.id }}"
+                     class="visually-hidden"
+                     {% if option.selected_value == value %}checked{% endif %}>
+              <span style="display: inline-block; padding: 8px 16px; border: 1px solid var(--color-border); border-radius: var(--border-radius); transition: all 0.2s;">
+                {{ value }}
+              </span>
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endfor -%}
+    
+    <script type="application/json">
+      {{ product.variants | json }}
+    </script>
+    <style>
+      .variant-selector input:checked + span {
+        border-color: var(--color-primary);
+        background: var(--color-primary);
+        color: var(--color-button-text);
+      }
+    </style>
+  </variant-selects>
+{%- endunless -%}

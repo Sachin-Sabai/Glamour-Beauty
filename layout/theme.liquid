@@ -1,0 +1,96 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+    
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% else %}
+      {% if settings.default_meta_description != blank %}
+        <meta name="description" content="{{ settings.default_meta_description | escape }}">
+      {% endif %}
+    {% endif %}
+    {% render 'meta-tags' %}
+    
+    {% comment %} theme-check-disable RemoteAsset {% endcomment %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    {{ content_for_header }}
+
+    <style>
+      :root {
+        --color-primary: {{ settings.color_primary }};
+        --color-secondary: {{ settings.color_secondary }};
+        --color-accent: {{ settings.color_accent }};
+        --color-bg: {{ settings.color_bg }};
+        --color-text: {{ settings.color_text }};
+        --color-text-light: {{ settings.color_text_light }};
+        --color-border: {{ settings.color_border }};
+        --color-button-text: {{ settings.color_button_text }};
+        --border-radius: {{ settings.border_radius }}px;
+        --font-heading: 'Playfair Display', serif;
+        --font-body: 'Poppins', sans-serif;
+        --font-script: 'Great Vibes', cursive;
+      }
+    </style>
+
+    {{ 'theme.css' | asset_url | stylesheet_tag: preload: true }}
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  </head>
+
+  <body class="template-{{ request.page_type | handle }}">
+    <div id="scroll-progress-bar"></div>
+
+    {% section 'announcement-bar' %}
+    {% section 'header' %}
+
+    {% if settings.enable_cart_drawer %}
+      {% section 'cart-drawer' %}
+    {% endif %}
+
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'footer' %}
+
+    <div id="toast-container"></div>
+    
+    <button id="back-to-top" aria-label="Back to top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
+
+    <script>
+      window.shopUrl = '{{ request.origin }}';
+      window.routes = {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}'
+      };
+
+      window.cartStrings = {
+        error: `{{ 'cart.general.error' | t | default: 'There was an error while updating your cart. Please try again.' }}`,
+        quantityError: `{{ 'cart.general.cart_error' | t: quantity: '[quantity]' | default: 'You can only add [quantity] of this item to your cart.' }}`
+      }
+    </script>
+  </body>
+</html>

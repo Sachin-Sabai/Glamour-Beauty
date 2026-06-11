@@ -1,0 +1,224 @@
+<footer class="site-footer" style="background-color: {{ section.settings.bg_color }}; color: {{ section.settings.text_color }}; padding-top: 40px;">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px;">
+      
+      <!-- Column 1: About -->
+      <div>
+        {%- if section.settings.logo != blank -%}
+          <img width="400" height="400" src="{{ section.settings.logo | image_url: width: 300 }}" alt="{{ shop.name }}" style="max-width: 150px; margin-bottom: 20px;">
+        {%- else -%}
+          <h2 style="font-family: var(--font-heading); font-size: 28px; margin-bottom: 20px; color: inherit;">{{ shop.name }}</h2>
+        {%- endif -%}
+        
+        {%- if section.settings.description != blank -%}
+          <p style="opacity: 0.8; line-height: 1.6; margin: 0 0 15px 0; font-size: 14px;">{{ section.settings.description }}</p>
+        {%- endif -%}
+        
+        <div style="display: flex; gap: 15px;">
+          {%- if settings.social_instagram_link != blank -%}
+            <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">Instagram</span>{% render 'icon-social', icon: 'instagram' %}</a>
+          {%- endif -%}
+          {%- if settings.social_facebook_link != blank -%}
+            <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">Facebook</span>{% render 'icon-social', icon: 'facebook' %}</a>
+          {%- endif -%}
+          {%- if settings.social_youtube_link != blank -%}
+            <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">YouTube</span>{% render 'icon-social', icon: 'youtube' %}</a>
+          {%- endif -%}
+          {%- if settings.social_pinterest_link != blank -%}
+            <a href="{{ settings.social_pinterest_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">Pinterest</span>{% render 'icon-social', icon: 'pinterest' %}</a>
+          {%- endif -%}
+          {%- if settings.social_tiktok_link != blank -%}
+            <a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">TikTok</span>{% render 'icon-social', icon: 'tiktok' %}</a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Column 2: Quick Links -->
+      <div>
+        <h3 style="font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Quick Links</h3>
+        <ul style="list-style: none; padding: 0; margin: 0; opacity: 0.8; line-height: 2;">
+          {%- for link in linklists[section.settings.menu_1].links -%}
+            <li><a href="{{ link.url }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <!-- Column 3: Customer Care -->
+      <div>
+        <h3 style="font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Customer Care</h3>
+        <ul style="list-style: none; padding: 0; margin: 0; opacity: 0.8; line-height: 2;">
+          {%- for link in linklists[section.settings.menu_2].links -%}
+            <li><a href="{{ link.url }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <!-- Column 4: Contact -->
+      <div>
+        <h3 style="font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Contact Us</h3>
+        <ul style="list-style: none; padding: 0; margin: 0; opacity: 0.8; line-height: 1.8; font-size: 14px;">
+          {%- if settings.contact_email != blank -%}
+            <li style="margin-bottom: 5px;">
+              <strong>Email:</strong><br><a href="mailto:{{ settings.contact_email }}" style="color: inherit; text-decoration: none;">{{ settings.contact_email }}</a>
+            </li>
+          {%- endif -%}
+          {%- if settings.contact_phone != blank -%}
+            <li style="margin-bottom: 5px;">
+              <strong>Phone:</strong><br><a href="tel:{{ settings.contact_phone }}" style="color: inherit; text-decoration: none;">{{ settings.contact_phone }}</a>
+            </li>
+          {%- endif -%}
+          {%- if settings.contact_hours != blank -%}
+            <li>
+              <strong>Hours:</strong><br>{{ settings.contact_hours | newline_to_br }}
+            </li>
+          {%- endif -%}
+        </ul>
+      </div>
+      
+      <!-- Column 5: Legal -->
+      <div>
+        <h3 style="font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Legal</h3>
+        <ul style="list-style: none; padding: 0; margin: 0; opacity: 0.8; line-height: 1.8; font-size: 14px;">
+          <li style="margin-bottom: 5px;"><a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">Privacy Policy</a></li>
+          <li style="margin-bottom: 5px;"><a href="{{ shop.refund_policy.url | default: '/policies/refund-policy' }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">Refund Policy</a></li>
+          <li style="margin-bottom: 5px;"><a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">Terms of Service</a></li>
+          <li style="margin-bottom: 5px;"><a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">Shipping Policy</a></li>
+        </ul>
+      </div>
+      
+    </div>
+
+    {%- if section.settings.show_newsletter -%}
+      <div style="border-top: 1px solid rgba(255,255,255,0.1); padding: 20px 0; text-align: center;">
+        <h3 style="font-size: 16px; margin: 0 0 10px 0;">Subscribe to our emails</h3>
+        <div style="max-width: 400px; margin: 0 auto;">
+          {%- form 'customer', id: 'footer-newsletter' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <div style="display: flex; border-bottom: 1px solid currentColor;">
+              <input type="email" name="contact[email]" placeholder="Email address" required style="flex-grow: 1; padding: 10px 0; background: transparent; border: none; color: inherit; outline: none;">
+              <button type="submit" style="background: transparent; border: none; color: inherit; cursor: pointer; padding: 0 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">Subscribe</button>
+            </div>
+            {%- if form.posted_successfully? -%}
+              <p style="margin-top: 10px; color: #4BB543; font-size: 14px;">{{ 'general.newsletter.success_message' | t }}</p>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding: 20px 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; font-size: 12px; opacity: 0.6;">
+      <div style="display: flex; gap: 20px; align-items: center;">
+        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+          <div class="footer-localization">
+            {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+              <div class="localization-form__select">
+                <h2 class="visually-hidden" id="FooterCountryLabel">{{ 'localization.country_label' | t }}</h2>
+                <select name="country_code" aria-labelledby="FooterCountryLabel" style="background: transparent; color: inherit; border: 1px solid rgba(255,255,255,0.3); padding: 5px; border-radius: 4px;" onchange="this.form.submit()">
+                  {%- for country in localization.available_countries -%}
+                    <option value="{{ country.iso_code }}" {%- if country.iso_code == localization.country.iso_code %} selected{% endif %} style="color: #000;">
+                      {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            {%- endform -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+          <div class="footer-localization">
+            {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
+              <div class="localization-form__select">
+                <h2 class="visually-hidden" id="FooterLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+                <select name="language_code" aria-labelledby="FooterLanguageLabel" style="background: transparent; color: inherit; border: 1px solid rgba(255,255,255,0.3); padding: 5px; border-radius: 4px;" onchange="this.form.submit()">
+                  {%- for language in localization.available_languages -%}
+                    <option value="{{ language.iso_code }}" {%- if language.iso_code == localization.language.iso_code %} selected{% endif %} style="color: #000;">
+                      {{ language.endonym_name | capitalize }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            {%- endform -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div>
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright_text }}
+      </div>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <!-- Icons can be added here or payment svg icons -->
+        <span class="visually-hidden">Payment methods</span>
+        {% for type in shop.enabled_payment_types %}
+          {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#2C2C2C"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo (optional)"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Store Description",
+      "default": "Premium beauty products crafted with care. Discover your natural glow with GlamourBeauty."
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "Menu 1",
+      "default": "footer"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Menu 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show Newsletter Signup",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "label": "Enable country/region selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "label": "Enable language selector",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Additional Copyright Text",
+      "default": "All rights reserved."
+    }
+  ]
+}
+{% endschema %}

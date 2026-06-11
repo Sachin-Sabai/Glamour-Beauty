@@ -1,0 +1,43 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": { "type": "vendor" },
+        "title": { "type": "title" },
+        "price": { "type": "price" },
+        "variant_picker": { "type": "variant_picker" },
+        "buy_buttons": { "type": "buy_buttons" },
+        "description": { "type": "description" },
+        "accordion_1": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Returns",
+            "content": "<p>Free shipping on orders over $50. We accept returns within 30 days of purchase.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "variant_picker",
+        "buy_buttons",
+        "description",
+        "accordion_1"
+      ],
+      "settings": {}
+    },
+    "related": {
+      "type": "product-grid",
+      "settings": {
+        "heading": "You May Also Like",
+        "subheading": "Recommended"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "related"
+  ]
+}

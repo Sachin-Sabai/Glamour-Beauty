@@ -1,0 +1,43 @@
+<div class="customer-reviews" style="padding: 40px 0; background-color: {{ section.settings.bg_color }}; text-align: center;">
+  <div class="container">
+    <div style="display: flex; flex-direction: column; align-items: center; max-width: 600px; margin: 0 auto;">
+      <div style="display: flex; margin-bottom: 20px;">
+        <svg viewBox="0 0 24 24" fill="#ddd" width="50" height="50" style="width: 50px; height: 50px; border-radius: 50%; border: 3px solid #fff; margin-right: -15px; position: relative; z-index: 4; background:#eee;"><circle cx="12" cy="8" r="4"></circle><path d="M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z"></path></svg>
+        <svg viewBox="0 0 24 24" fill="#ddd" width="50" height="50" style="width: 50px; height: 50px; border-radius: 50%; border: 3px solid #fff; margin-right: -15px; position: relative; z-index: 3; background:#eee;"><circle cx="12" cy="8" r="4"></circle><path d="M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z"></path></svg>
+        <svg viewBox="0 0 24 24" fill="#ddd" width="50" height="50" style="width: 50px; height: 50px; border-radius: 50%; border: 3px solid #fff; margin-right: -15px; position: relative; z-index: 2; background:#eee;"><circle cx="12" cy="8" r="4"></circle><path d="M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z"></path></svg>
+        <svg viewBox="0 0 24 24" fill="#ddd" width="50" height="50" style="width: 50px; height: 50px; border-radius: 50%; border: 3px solid #fff; margin-right: -15px; position: relative; z-index: 1; background:#eee;"><circle cx="12" cy="8" r="4"></circle><path d="M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z"></path></svg>
+        <div style="width: 50px; height: 50px; border-radius: 50%; border: 3px solid #fff; background: var(--color-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; position: relative; z-index: 0;">50k+</div>
+      </div>
+      
+      <div style="display: flex; color: #ffc107; margin-bottom: 15px;">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+
+      <h2 style="font-family: var(--font-heading); font-size: clamp(28px, 4vw, 36px); margin-bottom: 15px;">Loved by 50,000+ Customers</h2>
+      <p style="font-size: 16px; color: var(--color-text-light);">Our products are crafted to deliver real results. Join our community of beautiful, confident customers.</p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer Reviews Summary",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FFF4F4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer Reviews Summary"
+    }
+  ]
+}
+{% endschema %}

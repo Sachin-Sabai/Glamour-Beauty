@@ -1,0 +1,22 @@
+<div class="collection-banner" style="position: relative; padding: 100px 20px; text-align: center; color: #fff;">
+  {%- if collection.image -%}
+    <img width="400" height="400" src="{{ collection.image | image_url: width: 2000 }}" alt="{{ collection.title }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
+  {%- else -%}
+    <div style="position: absolute; inset: 0; background: var(--color-primary); z-index: 1;"></div>
+  {%- endif -%}
+  <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.4); z-index: 2;"></div>
+  
+  <div class="container" style="position: relative; z-index: 3;">
+    <h1 style="font-size: clamp(36px, 5vw, 54px); margin-bottom: 15px;">{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}
+      <div style="max-width: 600px; margin: 0 auto; font-size: 18px; opacity: 0.9;">{{ collection.description }}</div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Banner",
+  "settings": []
+}
+{% endschema %}

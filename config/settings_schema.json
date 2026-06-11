@@ -1,0 +1,181 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "GlamourBeauty",
+    "theme_author": "Expert Developer",
+    "theme_version": "1.0.0",
+    "theme_support_url": "https://example.com/support",
+    "theme_documentation_url": "https://example.com/docs"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary Color",
+        "default": "#9a1845"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Secondary Color",
+        "default": "#C68A4D"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent Background",
+        "default": "#FFF4F4"
+      },
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Background Color",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text Color",
+        "default": "#2C2C2C"
+      },
+      {
+        "type": "color",
+        "id": "color_text_light",
+        "label": "Light Text Color",
+        "default": "#888888"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Border Color",
+        "default": "#F0E4E4"
+      },
+      {
+        "type": "color",
+        "id": "color_button_text",
+        "label": "Button Text Color",
+        "default": "#FFFFFF"
+      }
+    ]
+  },
+  {
+    "name": "Typography & Style",
+    "settings": [
+      {
+        "type": "range",
+        "id": "border_radius",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "px",
+        "label": "Border Radius",
+        "default": 4
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_cart_drawer",
+        "label": "Enable Cart Drawer",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_order_note",
+        "label": "Show Order Note",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram_link",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook_link",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube_link",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest_link",
+        "label": "Pinterest URL"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok_link",
+        "label": "TikTok URL"
+      }
+    ]
+  },
+  {
+    "name": "Contact Info",
+    "settings": [
+      {
+        "type": "text",
+        "id": "contact_email",
+        "label": "Email Address",
+        "default": "hello@glamourbeauty.com"
+      },
+      {
+        "type": "text",
+        "id": "contact_phone",
+        "label": "Phone Number",
+        "default": "+1 (555) 123-4567"
+      },
+      {
+        "type": "textarea",
+        "id": "contact_address",
+        "label": "Store Address",
+        "default": "123 Beauty Ave, New York, NY 10001"
+      },
+      {
+        "type": "textarea",
+        "id": "contact_hours",
+        "label": "Business Hours",
+        "default": "Mon-Fri: 9am - 6pm\nSat: 10am - 4pm"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon Image",
+        "info": "Will be scaled down to 32 x 32px"
+      }
+    ]
+  },
+  {
+    "name": "SEO & Analytics",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "default_meta_description",
+        "label": "Default Meta Description",
+        "info": "Used on pages without a description"
+      },
+      {
+        "type": "text",
+        "id": "google_analytics_id",
+        "label": "Google Analytics ID (Optional)"
+      }
+    ]
+  }
+]

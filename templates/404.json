@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-404",
+      "settings": {}
+    },
+    "featured": {
+      "type": "product-grid",
+      "settings": {
+        "heading": "You Might Like",
+        "subheading": "Featured"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "featured"
+  ]
+}

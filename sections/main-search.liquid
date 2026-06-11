@@ -1,0 +1,58 @@
+<div class="search-template" style="padding: 40px 0; background: var(--color-bg);">
+  <div class="container">
+    <div style="text-align: center; max-width: 600px; margin: 0 auto 60px;">
+      <h1 style="font-size: clamp(32px, 5vw, 48px); margin-bottom: 20px;">
+        {%- if search.performed -%}
+          Search Results for "{{ search.terms | escape }}"
+        {%- else -%}
+          Search Our Store
+        {%- endif -%}
+      </h1>
+      
+      <form action="{{ routes.search_url }}" method="get" role="search" style="position: relative; display: flex;">
+        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="What are you looking for?" class="form-input" style="flex-grow: 1; padding: 15px 20px; border-radius: var(--border-radius) 0 0 var(--border-radius); border-right: none; font-size: 16px;">
+        <button type="submit" class="btn btn-primary" style="border-radius: 0 var(--border-radius) var(--border-radius) 0; padding: 15px 30px;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </form>
+    </div>
+
+    {%- if search.performed -%}
+      {%- paginate search.results by 24 -%}
+        {%- if search.results_count == 0 -%}
+          <div style="text-align: center; padding: 40px 0;">
+            <p style="font-size: 18px; color: var(--color-text-light);">We couldn't find anything for "{{ search.terms | escape }}". Please try a different search term.</p>
+          </div>
+        {%- else -%}
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px;">
+            {%- for item in search.results -%}
+              {%- if item.object_type == 'product' -%}
+                {% render 'product-card', product_card_product: item, show_secondary_image: true %}
+              {%- elsif item.object_type == 'article' -%}
+                <div class="search-article-card" style="background: #fff; padding: 20px; border-radius: var(--border-radius); box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                  <h3 style="font-family: var(--font-heading); font-size: 20px; margin-bottom: 10px;"><a href="{{ item.url }}" style="color: inherit; text-decoration: none;">{{ item.title }}</a></h3>
+                  <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 15px;">{{ item.content | strip_html | truncatewords: 20 }}</p>
+                  <a href="{{ item.url }}" style="font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-primary);">Read Article</a>
+                </div>
+              {%- elsif item.object_type == 'page' -%}
+                <div class="search-page-card" style="background: #fff; padding: 20px; border-radius: var(--border-radius); box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                  <h3 style="font-family: var(--font-heading); font-size: 20px; margin-bottom: 10px;"><a href="{{ item.url }}" style="color: inherit; text-decoration: none;">{{ item.title }}</a></h3>
+                  <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 15px;">{{ item.content | strip_html | truncatewords: 20 }}</p>
+                  <a href="{{ item.url }}" style="font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-primary);">View Page</a>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {% render 'pagination', paginate: paginate %}
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Search Results",
+  "settings": []
+}
+{% endschema %}

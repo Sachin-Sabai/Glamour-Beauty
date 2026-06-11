@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {}
+    },
+    "story": {
+      "type": "brand-story",
+      "settings": {
+        "heading": "The GlamourBeauty Story",
+        "text": "<p>From our humble beginnings to a globally recognized luxury beauty brand, our mission has always been to empower individuals to embrace their natural beauty. We source the finest ingredients from around the world to deliver products that are safe, effective, and environmentally conscious.</p>"
+      }
+    },
+    "ingredients": {
+      "type": "ingredients-highlight",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "story",
+    "ingredients"
+  ]
+}

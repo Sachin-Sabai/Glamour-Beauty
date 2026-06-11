@@ -1,0 +1,19 @@
+<div class="404-page" style="padding: 100px 20px; background: var(--color-bg); text-align: center;">
+  <div class="container" style="max-width: 600px; margin: 0 auto;">
+    <h1 style="font-size: clamp(80px, 10vw, 120px); font-family: var(--font-heading); color: var(--color-primary); margin-bottom: 10px; line-height: 1;">404</h1>
+    <h2 style="font-size: 24px; margin-bottom: 20px;">Page Not Found</h2>
+    <p style="font-size: 16px; color: var(--color-text-light); margin-bottom: 40px;">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+    
+    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+      <a href="{{ routes.root_url }}" class="btn btn-primary">Go to Homepage</a>
+      <a href="{{ routes.all_products_collection_url }}" class="btn btn-outline">Shop All Products</a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404 Error",
+  "settings": []
+}
+{% endschema %}

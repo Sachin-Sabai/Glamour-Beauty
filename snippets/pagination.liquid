@@ -1,0 +1,37 @@
+{%- if paginate.pages > 1 -%}
+  <nav class="pagination" role="navigation" aria-label="Pagination">
+    <ul class="pagination-list" style="display: flex; justify-content: center; align-items: center; gap: 10px; margin: 40px 0; list-style: none; padding: 0;">
+      {%- if paginate.previous -%}
+        <li>
+          <a href="{{ paginate.previous.url }}{{ anchor }}" class="pagination-item pagination-item--prev" style="display: flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; padding: 0 12px; border: 1px solid var(--color-border); border-radius: var(--border-radius); text-decoration: none; color: var(--color-text);">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            <span class="visually-hidden">{{ 'general.pagination.previous' | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+
+      {%- for part in paginate.parts -%}
+        <li>
+          {%- if part.is_link -%}
+            <a href="{{ part.url }}{{ anchor }}" class="pagination-item" aria-label="Page {{ part.title }}" style="display: flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; padding: 0 12px; border: 1px solid var(--color-border); border-radius: var(--border-radius); text-decoration: none; color: var(--color-text);">{{ part.title }}</a>
+          {%- else -%}
+            {%- if part.title == paginate.current_page -%}
+              <span class="pagination-item pagination-item--current" aria-current="page" style="display: flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; padding: 0 12px; background: var(--color-primary); color: var(--color-button-text); border-radius: var(--border-radius); font-weight: 600;">{{ part.title }}</span>
+            {%- else -%}
+              <span class="pagination-item" style="display: flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; padding: 0 12px; color: var(--color-text-light);">{{ part.title }}</span>
+            {%- endif -%}
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+
+      {%- if paginate.next -%}
+        <li>
+          <a href="{{ paginate.next.url }}{{ anchor }}" class="pagination-item pagination-item--next" style="display: flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; padding: 0 12px; border: 1px solid var(--color-border); border-radius: var(--border-radius); text-decoration: none; color: var(--color-text);">
+            <span class="visually-hidden">{{ 'general.pagination.next' | t }}</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+        </li>
+      {%- endif -%}
+    </ul>
+  </nav>
+{%- endif -%}

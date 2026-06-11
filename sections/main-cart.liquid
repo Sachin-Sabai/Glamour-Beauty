@@ -1,0 +1,114 @@
+<div class="cart-page" style="padding: 40px 0; background: var(--color-bg);">
+  <div class="container" style="max-width: 1000px;">
+    <h1 style="font-size: 36px; margin-bottom: 40px; text-align: center;">{{ 'cart.general.title' | t }}</h1>
+
+    {% if cart.item_count > 0 %}
+      <form action="{{ routes.cart_url }}" method="post" id="cart-form">
+        <div style="border-bottom: 1px solid var(--color-border); padding-bottom: 10px; margin-bottom: 20px; display: flex; font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; color: var(--color-text-light);">
+          <div style="flex: 2;">Product</div>
+          <div style="flex: 1; text-align: center;">Quantity</div>
+          <div style="flex: 1; text-align: right;">Total</div>
+        </div>
+
+        {% for item in cart.items %}
+          <div class="cart-item" data-line="{{ forloop.index }}" data-key="{{ item.key }}" data-quantity="{{ item.quantity }}" style="display: flex; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--color-border);">
+            <div style="flex: 2; display: flex; gap: 20px; align-items: center;">
+              {% if item.image %}
+                <img width="400" height="400" src="{{ item.image | image_url: width: 200 }}" alt="{{ item.title | escape }}" style="width: 100px; border-radius: var(--border-radius);">
+              {% endif %}
+              <div>
+                <h3 style="font-size: 18px; margin-bottom: 5px;"><a href="{{ item.url }}">{{ item.product.title }}</a></h3>
+                {%- unless item.product.has_only_default_variant -%}
+                  <p style="font-size: 14px; color: var(--color-text-light); margin-bottom: 5px;">{{ item.variant.title }}</p>
+                {%- endunless -%}
+                <div style="font-weight: 500;">
+                  {%- if item.original_price != item.final_price -%}
+                    <s style="color: var(--color-text-light); font-size: 14px;">{{ item.original_price | money }}</s>
+                  {%- endif -%}
+                  {{ item.final_price | money }}
+                </div>
+                {%- if item.line_level_discount_allocations.size > 0 -%}
+                  <ul style="list-style: none; padding: 0; margin: 5px 0 0; color: var(--color-primary); font-size: 13px;">
+                    {%- for discount in item.line_level_discount_allocations -%}
+                      <li>
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                        {{ discount.discount_application.title }} (-{{ discount.amount | money }})
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            </div>
+            
+            <div style="flex: 1; display: flex; justify-content: center; align-items: center; gap: 10px;">
+              {% render 'quantity-selector', value: item.quantity, line: forloop.index %}
+              <a href="{{ item.url_to_remove }}" class="item-remove" data-line="{{ forloop.index }}" style="color: var(--color-text-light); text-decoration: underline; font-size: 12px;">Remove</a>
+            </div>
+            
+            <div style="flex: 1; text-align: right; font-size: 18px; font-weight: 500;">
+              {{ item.final_line_price | money }}
+            </div>
+          </div>
+        {% endfor %}
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; margin-top: 40px; gap: 40px;">
+          {% if section.settings.show_cart_note %}
+            <div style="flex: 1; min-width: 300px;">
+              <label for="CartSpecialInstructions" style="display: block; margin-bottom: 10px; font-weight: 600;">Special instructions for seller</label>
+              <textarea name="note" id="CartSpecialInstructions" class="form-input" rows="4" style="border: 1px solid var(--color-border); padding: 15px; border-radius: var(--border-radius);">{{ cart.note }}</textarea>
+            </div>
+          {% endif %}
+
+          <div style="flex: 1; min-width: 300px; text-align: right;">
+            {%- if cart.cart_level_discount_applications.size > 0 -%}
+              <ul style="list-style: none; padding: 0; margin-bottom: 10px; color: var(--color-primary);">
+                {%- for discount in cart.cart_level_discount_applications -%}
+                  <li>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                    {{ discount.title }}: -{{ discount.total_allocated_amount | money }}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
+            <div style="font-size: 24px; font-weight: 500; margin-bottom: 10px;">
+              Subtotal: <span style="color: var(--color-primary);">{{ cart.total_price | money }}</span>
+            </div>
+            <p style="color: var(--color-text-light); margin-bottom: 20px;">
+              {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+                {{ 'cart.general.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+              {%- elsif cart.taxes_included -%}
+                {{ 'cart.general.taxes_included_but_shipping_at_checkout' | t }}
+              {%- elsif shop.shipping_policy.body != blank -%}
+                {{ 'cart.general.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+              {%- else -%}
+                {{ 'cart.general.taxes_and_shipping_at_checkout' | t }}
+              {%- endif -%}
+            </p>
+            <button type="submit" name="checkout" class="btn btn-primary btn-full" style="font-size: 18px; padding: 15px;">Check Out</button>
+            <a href="{{ routes.all_products_collection_url }}" style="display: inline-block; margin-top: 15px; color: var(--color-text); text-decoration: underline;">Continue Shopping</a>
+          </div>
+        </div>
+      </form>
+    {% else %}
+      <div style="text-align: center; padding: 40px 0;">
+        <h2 style="margin-bottom: 20px; font-family: var(--font-heading); font-size: 28px;">Your cart is currently empty</h2>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary">Continue Shopping</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart Page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_cart_note",
+      "label": "Show cart note",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
