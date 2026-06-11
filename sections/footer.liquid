@@ -106,6 +106,12 @@
       </div>
     {%- endif -%}
 
+    {%- if shop.features.follow_on_shop? and section.settings.enable_follow_on_shop -%}
+      <div style="text-align: center; margin-top: 20px;">
+        {{ shop | login_button: action: 'follow' }}
+      </div>
+    {%- endif -%}
+
     <div style="border-top: 1px solid rgba(255,255,255,0.1); padding: 20px 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; font-size: 12px; opacity: 0.6;">
       <div style="display: flex; gap: 20px; align-items: center;">
         {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
@@ -199,6 +205,12 @@
       "type": "checkbox",
       "id": "show_newsletter",
       "label": "Show Newsletter Signup",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_follow_on_shop",
+      "label": "Enable Follow on Shop",
       "default": true
     },
     {

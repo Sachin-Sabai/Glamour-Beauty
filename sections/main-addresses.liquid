@@ -1,0 +1,142 @@
+<div class="customer addresses" style="max-width: 800px; margin: 50px auto; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 40px;">
+    <h1>Addresses</h1>
+    <a href="{{ routes.account_url }}">Return to Account details</a>
+  </div>
+
+  <div style="margin-bottom: 40px;" data-address>
+    <button type="button" aria-expanded="false" aria-controls="AddAddress" style="padding: 10px 20px; background: var(--color-primary); color: white; border: none; border-radius: var(--border-radius); cursor: pointer;" onclick="document.getElementById('AddAddress').style.display='block'; this.setAttribute('aria-expanded', 'true');">
+      Add a new address
+    </button>
+    
+    <div id="AddAddress" style="display: none; padding: 20px; border: 1px solid var(--color-border); border-radius: var(--border-radius); margin-top: 20px;">
+      <h2 style="margin-bottom: 20px;">Add a new address</h2>
+      {%- form 'customer_address', customer.new_address, aria-labelledBy: 'AddressNewHeading' -%}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+          <div class="field">
+            <label for="AddressFirstNameNew">First name</label>
+            <input type="text" id="AddressFirstNameNew" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+          </div>
+          <div class="field">
+            <label for="AddressLastNameNew">Last name</label>
+            <input type="text" id="AddressLastNameNew" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+          </div>
+        </div>
+        
+        <div class="field" style="margin-bottom: 15px;">
+          <label for="AddressCompanyNew">Company</label>
+          <input type="text" id="AddressCompanyNew" name="address[company]" value="{{ form.company }}" autocomplete="organization" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+        </div>
+        
+        <div class="field" style="margin-bottom: 15px;">
+          <label for="AddressAddress1New">Address 1</label>
+          <input type="text" id="AddressAddress1New" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+        </div>
+        
+        <div class="field" style="margin-bottom: 15px;">
+          <label for="AddressAddress2New">Address 2</label>
+          <input type="text" id="AddressAddress2New" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+          <div class="field">
+            <label for="AddressCityNew">City</label>
+            <input type="text" id="AddressCityNew" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+          </div>
+          <div class="field">
+            <label for="AddressCountryNew">Country</label>
+            <select id="AddressCountryNew" name="address[country]" data-default="{{ form.country }}" autocomplete="country" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+              {{ all_country_option_tags }}
+            </select>
+          </div>
+        </div>
+        
+        <div class="field" style="margin-bottom: 15px;">
+          <label for="AddressZipNew">Postal/Zip code</label>
+          <input type="text" id="AddressZipNew" name="address[zip]" value="{{ form.zip }}" autocapitalize="characters" autocomplete="postal-code" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+        </div>
+        
+        <div class="field" style="margin-bottom: 15px;">
+          <label for="AddressPhoneNew">Phone</label>
+          <input type="tel" id="AddressPhoneNew" name="address[phone]" value="{{ form.phone }}" autocomplete="tel" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+          {{ form.set_as_default_checkbox }}
+          <label for="address_default_address_new">Set as default address</label>
+        </div>
+        
+        <div>
+          <button style="padding: 10px 20px; background: var(--color-primary); color: white; border: none; border-radius: var(--border-radius); cursor: pointer; margin-right: 10px;">Add address</button>
+          <button type="reset" style="padding: 10px 20px; background: transparent; color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--border-radius); cursor: pointer;" onclick="document.getElementById('AddAddress').style.display='none';">Cancel</button>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+
+  <ul role="list" style="list-style: none; padding: 0;">
+    {%- for address in customer.addresses -%}
+      <li data-address style="border: 1px solid var(--color-border); border-radius: var(--border-radius); padding: 20px; margin-bottom: 20px;">
+        {%- if address == customer.default_address -%}
+          <h2 style="font-size: 16px; margin-bottom: 10px;">Default</h2>
+        {%- endif -%}
+        
+        {{ address | format_address }}
+        
+        <div style="margin-top: 15px;">
+          <button type="button" aria-expanded="false" aria-controls="EditAddress_{{ address.id }}" style="padding: 5px 15px; margin-right: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius); cursor: pointer;" onclick="document.getElementById('EditAddress_{{ address.id }}').style.display='block';">
+            Edit
+          </button>
+          <form method="post" action="{{ address.url }}" style="display: inline-block;">
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit" style="padding: 5px 15px; border: 1px solid var(--color-border); color: red; border-radius: var(--border-radius); cursor: pointer;">Delete</button>
+          </form>
+        </div>
+
+        <div id="EditAddress_{{ address.id }}" style="display: none; padding: 20px; border: 1px solid var(--color-border); border-radius: var(--border-radius); margin-top: 20px;">
+          <h2 style="margin-bottom: 20px;">Edit address</h2>
+          {%- form 'customer_address', address -%}
+            <!-- Basic edit form elements -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+              <div class="field">
+                <label for="AddressFirstName_{{ form.id }}">First name</label>
+                <input type="text" id="AddressFirstName_{{ form.id }}" name="address[first_name]" value="{{ form.first_name }}" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+              </div>
+              <div class="field">
+                <label for="AddressLastName_{{ form.id }}">Last name</label>
+                <input type="text" id="AddressLastName_{{ form.id }}" name="address[last_name]" value="{{ form.last_name }}" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+              </div>
+            </div>
+            
+            <div class="field" style="margin-bottom: 15px;">
+              <label for="AddressAddress1_{{ form.id }}">Address 1</label>
+              <input type="text" id="AddressAddress1_{{ form.id }}" name="address[address1]" value="{{ form.address1 }}" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+            </div>
+            
+            <div class="field" style="margin-bottom: 15px;">
+              <label for="AddressCity_{{ form.id }}">City</label>
+              <input type="text" id="AddressCity_{{ form.id }}" name="address[city]" value="{{ form.city }}" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              {{ form.set_as_default_checkbox }}
+              <label for="address_default_address_{{ form.id }}">Set as default address</label>
+            </div>
+            
+            <div>
+              <button style="padding: 10px 20px; background: var(--color-primary); color: white; border: none; border-radius: var(--border-radius); cursor: pointer; margin-right: 10px;">Update address</button>
+              <button type="reset" style="padding: 10px 20px; background: transparent; color: var(--color-text); border: 1px solid var(--color-border); border-radius: var(--border-radius); cursor: pointer;" onclick="document.getElementById('EditAddress_{{ address.id }}').style.display='none';">Cancel</button>
+            </div>
+          {%- endform -%}
+        </div>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% schema %}
+{
+  "name": "Addresses",
+  "settings": []
+}
+{% endschema %}

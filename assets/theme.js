@@ -371,46 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 11. Variant Picker
-  const variantSelectors = document.querySelectorAll('.variant-selector input');
-  variantSelectors.forEach(selector => {
-    selector.addEventListener('change', function() {
-      const form = this.closest('form');
-      const select = form.querySelector('select[name="id"]');
-      const fieldsets = Array.from(form.querySelectorAll('fieldset'));
-      
-      const selectedOptions = fieldsets.map(fieldset => {
-        return Array.from(fieldset.querySelectorAll('input')).find(radio => radio.checked).value;
-      });
-      
-      const variantData = JSON.parse(form.querySelector('[type="application/json"]').textContent);
-      
-      const currentVariant = variantData.find(variant => {
-        return !variant.options.map((option, index) => {
-          return selectedOptions[index] === option;
-        }).includes(false);
-      });
-      
-      if (currentVariant) {
-        select.value = currentVariant.id;
-        // Update URL
-        if(!form.dataset.noHistory) {
-          window.history.replaceState({ }, '', `${this.dataset.url}?variant=${currentVariant.id}`);
-        }
-        // Update Price
-        const priceContainer = document.querySelector('.product-price');
-        if(priceContainer) {
-          // Simplistic price update, assuming you have a money formatter function in a real app
-          priceContainer.textContent = '$' + (currentVariant.price / 100).toFixed(2);
-        }
-        // Update Image
-        if(currentVariant.featured_image) {
-          const mainImg = document.querySelector('.product-main-image img');
-          if(mainImg) mainImg.src = currentVariant.featured_image.src;
-        }
-      }
-    });
-  });
+  // 11. Variant Picker - Replaced by custom element <variant-selects>
 
   // 12. Quantity Selector - Replaced by global CartAjax delegation
 

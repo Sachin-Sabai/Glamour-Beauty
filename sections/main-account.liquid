@@ -1,0 +1,58 @@
+<div class="customer account" style="max-width: 1200px; margin: 50px auto; padding: 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+    <h1>Account</h1>
+    <a href="{{ routes.account_logout_url }}">Log out</a>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px;">
+    <div>
+      <h2 style="font-size: 20px; margin-bottom: 20px;">Order history</h2>
+      {% paginate customer.orders by 20 %}
+        {%- if customer.orders.size > 0 -%}
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--color-border); text-align: left;">
+                <th style="padding: 10px;">Order</th>
+                <th style="padding: 10px;">Date</th>
+                <th style="padding: 10px;">Payment Status</th>
+                <th style="padding: 10px;">Fulfillment Status</th>
+                <th style="padding: 10px;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for order in customer.orders -%}
+                <tr style="border-bottom: 1px solid var(--color-border);">
+                  <td style="padding: 10px;">
+                    <a href="{{ order.customer_url }}" aria-label="Order number {{ order.name }}">{{ order.name }}</a>
+                  </td>
+                  <td style="padding: 10px;">{{ order.created_at | time_tag: format: 'date' }}</td>
+                  <td style="padding: 10px;">{{ order.financial_status_label }}</td>
+                  <td style="padding: 10px;">{{ order.fulfillment_status_label }}</td>
+                  <td style="padding: 10px;">{{ order.total_price | money_with_currency }}</td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+          {%- if paginate.pages > 1 -%}
+            {% render 'pagination', paginate: paginate %}
+          {%- endif -%}
+        {%- else -%}
+          <p>You haven't placed any orders yet.</p>
+        {%- endif -%}
+      {% endpaginate %}
+    </div>
+
+    <div>
+      <h2 style="font-size: 20px; margin-bottom: 20px;">Account details</h2>
+      {{ customer.default_address | format_address }}
+      <a href="{{ routes.account_addresses_url }}" style="display: block; margin-top: 20px;">View addresses ({{ customer.addresses_count }})</a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Account",
+  "settings": []
+}
+{% endschema %}

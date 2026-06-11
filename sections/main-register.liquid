@@ -1,0 +1,51 @@
+<div class="customer register" style="max-width: 500px; margin: 50px auto; padding: 20px;">
+  <h1 style="text-align: center; margin-bottom: 20px;">Create account</h1>
+  {%- form 'create_customer', novalidate: 'novalidate' -%}
+    {%- if form.errors -%}
+      <h2 class="form__message" tabindex="-1" autofocus style="color: red;">
+        <span class="visually-hidden">Error </span>
+        Please adjust the following:
+      </h2>
+      <ul style="color: red;">
+        {%- for field in form.errors -%}
+          <li>
+            {%- if field == 'form' -%}
+              {{ form.errors.messages[field] }}
+            {%- else -%}
+              <a href="#RegisterForm-{{ field }}">{{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}</a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <div class="field" style="margin-bottom: 15px;">
+      <label for="RegisterForm-FirstName" class="visually-hidden">First name</label>
+      <input type="text" name="customer[first_name]" id="RegisterForm-FirstName" {% if form.first_name %}value="{{ form.first_name }}"{% endif %} autocomplete="given-name" placeholder="First name" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+    </div>
+    
+    <div class="field" style="margin-bottom: 15px;">
+      <label for="RegisterForm-LastName" class="visually-hidden">Last name</label>
+      <input type="text" name="customer[last_name]" id="RegisterForm-LastName" {% if form.last_name %}value="{{ form.last_name }}"{% endif %} autocomplete="family-name" placeholder="Last name" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+    </div>
+
+    <div class="field" style="margin-bottom: 15px;">
+      <label for="RegisterForm-email" class="visually-hidden">Email</label>
+      <input type="email" name="customer[email]" id="RegisterForm-email" {% if form.email %} value="{{ form.email }}"{% endif %} spellcheck="false" autocapitalize="off" autocomplete="email" aria-required="true" {% if form.errors contains 'email' %}aria-invalid="true" aria-describedby="RegisterForm-email-error"{% endif %} placeholder="Email" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+    </div>
+
+    <div class="field" style="margin-bottom: 15px;">
+      <label for="RegisterForm-password" class="visually-hidden">Password</label>
+      <input type="password" name="customer[password]" id="RegisterForm-password" aria-required="true" {% if form.errors contains 'password' %}aria-invalid="true" aria-describedby="RegisterForm-password-error"{% endif %} placeholder="Password" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+    </div>
+
+    <button style="width: 100%; padding: 10px; background: var(--color-primary); color: white; border: none; border-radius: var(--border-radius); cursor: pointer;">Create</button>
+  {%- endform -%}
+</div>
+
+{% schema %}
+{
+  "name": "Register",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,57 @@
+<div class="customer login" style="max-width: 500px; margin: 50px auto; padding: 20px;">
+  <h1 id="recover" tabindex="-1" style="text-align: center; margin-bottom: 20px;">Reset your password</h1>
+  <div>
+    <p style="text-align: center;">We will send you an email to reset your password.</p>
+    {%- form 'recover_customer_password' -%}
+      {% assign recover_success = form.posted_successfully? %}
+      <div class="field" style="margin-bottom: 15px;">
+        <label for="RecoverEmail" class="visually-hidden">Email</label>
+        <input type="email" value="" name="email" id="RecoverEmail" autocorrect="off" autocapitalize="off" autocomplete="email" {% if form.errors %}aria-invalid="true" aria-describedby="RecoverEmail-email-error"{% endif %} placeholder="Email" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+      </div>
+      {%- if form.errors -%}
+        <small id="RecoverEmail-email-error" class="form__message" style="color: red; display: block; margin-bottom: 15px;">{{ form.errors.messages['form'] }}</small>
+      {%- endif -%}
+      <button style="width: 100%; padding: 10px; background: var(--color-primary); color: white; border: none; border-radius: var(--border-radius); cursor: pointer; margin-bottom: 10px;">Submit</button>
+      <a href="#login" style="display: block; text-align: center;">Cancel</a>
+    {%- endform -%}
+  </div>
+
+  <h1 id="login" tabindex="-1" style="text-align: center; margin-bottom: 20px; margin-top: 50px;">Login</h1>
+  <div>
+    {%- if recover_success == true -%}
+      <h3 class="form__message" tabindex="-1" autofocus style="color: green; text-align: center;">Password recovery email sent.</h3>
+    {%- endif -%}
+    {%- form 'customer_login', novalidate: 'novalidate' -%}
+      {%- if form.errors -%}
+        <h2 class="form__message" tabindex="-1" autofocus style="color: red;">
+          <span class="visually-hidden">Error </span>
+          {{ 'templates.contact.form.error_heading' | t | default: 'Please adjust the following:' }}
+        </h2>
+        {{ form.errors | default_errors }}
+      {%- endif -%}
+
+      <div class="field" style="margin-bottom: 15px;">
+        <label for="CustomerEmail" class="visually-hidden">Email</label>
+        <input type="email" name="customer[email]" id="CustomerEmail" autocomplete="email" autocorrect="off" autocapitalize="off" {% if form.errors contains 'form' %}aria-invalid="true"{% endif %} placeholder="Email" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+      </div>
+
+      {%- if form.password_needed -%}
+        <div class="field" style="margin-bottom: 15px;">
+          <label for="CustomerPassword" class="visually-hidden">Password</label>
+          <input type="password" value="" name="customer[password]" id="CustomerPassword" autocomplete="current-password" {% if form.errors contains 'form' %}aria-invalid="true"{% endif %} placeholder="Password" style="width: 100%; padding: 10px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+        </div>
+        <a href="#recover" style="display: block; margin-bottom: 15px; text-align: right; font-size: 14px;">Forgot your password?</a>
+      {%- endif -%}
+
+      <button style="width: 100%; padding: 10px; background: var(--color-primary); color: white; border: none; border-radius: var(--border-radius); cursor: pointer; margin-bottom: 15px;">Sign in</button>
+      <a href="{{ routes.account_register_url }}" style="display: block; text-align: center;">Create account</a>
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Login",
+  "settings": []
+}
+{% endschema %}

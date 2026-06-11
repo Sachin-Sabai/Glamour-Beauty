@@ -67,16 +67,12 @@
       <a href="{{ product_card_product.url | default: '#' }}">{{ product_card_product.title | escape }}</a>
     </h3>
 
-    {%- if show_rating -%}
+    {%- if show_rating and product_card_product.metafields.reviews.rating.value != blank -%}
       <div class="product-card-rating" style="display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 8px;">
-        <div style="display: flex; color: #ffc107;">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <div style="display: flex; color: #ffc107;" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: product_card_product.metafields.reviews.rating.value, rating_max: product_card_product.metafields.reviews.rating.value.scale_max | default: 'Rating' }}">
+          <span aria-hidden="true" style="font-size: 14px;">★</span>
         </div>
-        <span style="font-size: 12px; color: var(--color-text-light);">(4.8)</span>
+        <span style="font-size: 12px; color: var(--color-text-light);">{{ product_card_product.metafields.reviews.rating.value }} ({{ product_card_product.metafields.reviews.rating_count }})</span>
       </div>
     {%- endif -%}
 

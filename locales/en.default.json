@@ -17,6 +17,12 @@
       "error_message": "Please enter a valid email address."
     }
   },
+  "gift_cards": {
+    "issued": {
+      "title": "Here's your {{ value }} gift card for {{ shop }}!",
+      "subtext": "Here is your gift card!"
+    }
+  },
   "cart": {
     "general": {
       "title": "Your Cart",
@@ -38,6 +44,16 @@
   "localization": {
     "country_label": "Country/region",
     "language_label": "Language"
+  },
+  "accessibility": {
+    "star_reviews_info": "{{ rating_value }} out of {{ rating_max }} stars"
+  },
+  "templates": {
+    "contact": {
+      "form": {
+        "error_heading": "Please adjust the following:"
+      }
+    }
   },
   "products": {
     "product": {

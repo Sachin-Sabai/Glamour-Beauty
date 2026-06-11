@@ -1,0 +1,85 @@
+<div class="customer order" style="max-width: 1200px; margin: 50px auto; padding: 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1>Order {{ order.name }}</h1>
+    <a href="{{ routes.account_url }}">Return to Account details</a>
+  </div>
+  
+  <p style="margin-bottom: 30px;">Placed on {{ order.created_at | time_tag: format: 'date_at_time' }}</p>
+
+  <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px;">
+    <div>
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--color-border); text-align: left;">
+            <th style="padding: 10px;">Product</th>
+            <th style="padding: 10px;">Price</th>
+            <th style="padding: 10px;">Quantity</th>
+            <th style="padding: 10px;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for line_item in order.line_items -%}
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 10px;">
+                {%- if line_item.url != blank -%}
+                  <a href="{{ line_item.url }}">{{ line_item.title }}</a>
+                {%- else -%}
+                  <p>{{ line_item.title }}</p>
+                {%- endif -%}
+                
+                {%- if line_item.selling_plan_allocation -%}
+                  <p style="font-size: 12px; color: var(--color-text-light);">{{ line_item.selling_plan_allocation.selling_plan.name }}</p>
+                {%- endif -%}
+              </td>
+              <td style="padding: 10px;">
+                {{ line_item.price | money }}
+                {%- if line_item.unit_price_measurement -%}
+                  <div style="font-size: 12px; color: var(--color-text-light);">
+                    {{ line_item.unit_price | money }} / 
+                    {%- if line_item.unit_price_measurement.reference_value != 1 -%}
+                      {{- line_item.unit_price_measurement.reference_value -}}
+                    {%- endif -%}
+                    {{ line_item.unit_price_measurement.reference_unit }}
+                  </div>
+                {%- endif -%}
+              </td>
+              <td style="padding: 10px;">{{ line_item.quantity }}</td>
+              <td style="padding: 10px;">{{ line_item.final_line_price | money }}</td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+        <tfoot style="font-weight: bold;">
+          <tr>
+            <td colspan="3" style="padding: 10px; text-align: right;">Subtotal</td>
+            <td style="padding: 10px;">{{ order.line_items_subtotal_price | money }}</td>
+          </tr>
+          <tr>
+            <td colspan="3" style="padding: 10px; text-align: right;">Shipping</td>
+            <td style="padding: 10px;">{{ order.shipping_price | money }}</td>
+          </tr>
+          <tr>
+            <td colspan="3" style="padding: 10px; text-align: right;">Total</td>
+            <td style="padding: 10px;">{{ order.total_price | money_with_currency }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    
+    <div>
+      <h2 style="font-size: 20px; margin-bottom: 20px;">Billing Address</h2>
+      <p><strong>Payment Status:</strong> {{ order.financial_status_label }}</p>
+      {{ order.billing_address | format_address }}
+      
+      <h2 style="font-size: 20px; margin-bottom: 20px; margin-top: 30px;">Shipping Address</h2>
+      <p><strong>Fulfillment Status:</strong> {{ order.fulfillment_status_label }}</p>
+      {{ order.shipping_address | format_address }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Order",
+  "settings": []
+}
+{% endschema %}

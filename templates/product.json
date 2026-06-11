@@ -29,10 +29,9 @@
       "settings": {}
     },
     "related": {
-      "type": "product-grid",
+      "type": "product-recommendations",
       "settings": {
-        "heading": "You May Also Like",
-        "subheading": "Recommended"
+        "heading": "You May Also Like"
       }
     }
   },

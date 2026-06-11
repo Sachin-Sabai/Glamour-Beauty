@@ -2,34 +2,67 @@
 {%- unless product.has_only_default_variant -%}
   <variant-selects class="variant-selector" style="margin: 20px 0; display: block;" data-section="{{ section.id }}" data-url="{{ product.url }}">
     {%- for option in product.options_with_values -%}
+      {% liquid
+        assign is_color = false
+        assign option_name_downcase = option.name | downcase
+        if option_name_downcase contains 'color' or option_name_downcase contains 'colour' or option_name_downcase contains 'shade'
+          assign is_color = true
+        endif
+      %}
       <fieldset style="border: none; padding: 0; margin-bottom: 15px;">
         <legend style="font-weight: 600; margin-bottom: 8px;">{{ option.name }}</legend>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
           {%- for value in option.values -%}
-            <label style="cursor: pointer;">
+            <label style="cursor: pointer;" title="{{ value | escape }}">
               <input type="radio" 
                      name="{{ option.name }}" 
                      value="{{ value | escape }}" 
-                     form="product-form-{{ product.id }}"
+                     form="product-form-{{ section.id }}"
                      class="visually-hidden"
+                     data-index="{{ forloop.parentloop.index0 }}"
                      {% if option.selected_value == value %}checked{% endif %}>
-              <span style="display: inline-block; padding: 8px 16px; border: 1px solid var(--color-border); border-radius: var(--border-radius); transition: all 0.2s;">
-                {{ value }}
-              </span>
+              {% if is_color %}
+                <span class="swatch" style="
+                  display: inline-block; 
+                  width: 30px; 
+                  height: 30px; 
+                  border-radius: 50%; 
+                  border: 2px solid transparent; 
+                  box-shadow: 0 0 0 1px var(--color-border);
+                  transition: all 0.2s; 
+                  {% if value.swatch.color %}background-color: {{ value.swatch.color }};
+                  {% elsif value.swatch.image %}background-image: url({{ value.swatch.image | image_url: width: 60 }}); background-size: cover;
+                  {% else %}background-color: {{ value | downcase | remove: ' ' }};{% endif %}
+                "></span>
+              {% else %}
+                <span class="pill" style="display: inline-block; padding: 8px 16px; border: 1px solid var(--color-border); border-radius: var(--border-radius); transition: all 0.2s;">
+                  {{ value }}
+                </span>
+              {% endif %}
             </label>
           {%- endfor -%}
         </div>
       </fieldset>
     {%- endfor -%}
     
-    <script type="application/json">
+    <script type="application/json" id="ProductJSON-{{ section.id }}">
       {{ product.variants | json }}
     </script>
     <style>
-      .variant-selector input:checked + span {
+      .variant-selector input:checked + .pill {
         border-color: var(--color-primary);
         background: var(--color-primary);
-        color: var(--color-button-text);
+        color: var(--color-button-text, #fff);
+      }
+      .variant-selector input:checked + .swatch {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-primary);
+      }
+      .variant-selector input:disabled + .pill,
+      .variant-selector input:disabled + .swatch {
+        opacity: 0.5;
+        text-decoration: line-through;
+        cursor: not-allowed;
       }
     </style>
   </variant-selects>
