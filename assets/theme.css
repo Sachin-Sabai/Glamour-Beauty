@@ -645,3 +645,9 @@ ul, ol {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+
+/* Performance Optimizations */
+.featured-categories, .brand-story-section, .image-marquee-section, .site-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
+}

@@ -113,7 +113,36 @@
           
           <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 30px;">
             {%- for product in collection.products -%}
-              {% render 'product-card', product_card_product: product, show_secondary_image: true, show_vendor: true, show_rating: true %}
+              {%- assign lazy_load = true -%}
+              {%- if forloop.index <= 4 -%}
+                {%- assign lazy_load = false -%}
+              {%- endif -%}
+              {% render 'product-card', product_card_product: product, lazy_load: lazy_load, show_secondary_image: true, show_vendor: true, show_rating: true %}
+            {%- else -%}
+              <div class="collection-empty-state" style="text-align: center; padding: 40px 20px; grid-column: 1 / -1;">
+                <h2 style="font-family: var(--font-heading); margin-bottom: 15px;">{{ 'collections.general.no_matches' | t | default: 'No products found' }}</h2>
+                <p style="color: var(--color-text-light); margin-bottom: 20px;">
+                  {%- assign has_active_filters = false -%}
+                  {%- for filter in collection.filters -%}
+                    {%- if filter.active_values.size > 0 or filter.min_value.value != nil or filter.max_value.value != nil -%}
+                      {%- assign has_active_filters = true -%}
+                    {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  
+                  {%- if has_active_filters -%}
+                    {{ 'collections.general.use_fewer_filters' | t | default: 'Try removing some filters or browse all products.' }}
+                  {%- else -%}
+                    {{ 'collections.general.empty' | t | default: 'There are no products in this collection.' }}
+                  {%- endif -%}
+                </p>
+                <div style="display: flex; justify-content: center; gap: 15px;">
+                  {%- if has_active_filters -%}
+                    <a href="{{ collection.url }}" class="btn btn-secondary" style="border: 1px solid var(--color-border); padding: 10px 20px; border-radius: var(--border-radius); text-decoration: none; color: var(--color-text);">{{ 'collections.general.clear_filters' | t | default: 'Clear filters' }}</a>
+                  {%- endif -%}
+                  <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary" style="padding: 10px 20px; border-radius: var(--border-radius); text-decoration: none;">{{ 'collections.general.view_all' | t | default: 'View all products' }}</a>
+                </div>
+              </div>
             {%- endfor -%}
           </div>
           

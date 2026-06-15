@@ -1,23 +1,45 @@
 {%- if section.settings.show_announcement -%}
-  <div class="announcement-bar" style="background-color: {{ section.settings.bg_color }}; color: {{ section.settings.text_color }}; text-align: center; padding: 8px 20px; font-size: 13px; position: relative; z-index: 101; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 15px;">
-    {%- for block in section.blocks -%}
-      <div class="announcement-bar__item" style="display: flex; align-items: center;" {{ block.shopify_attributes }}>
-        {%- if block.settings.link != blank -%}
-          <a href="{{ block.settings.link }}" style="color: inherit; text-decoration: none;">
-        {%- endif -%}
-          {{ block.settings.text }}
-        {%- if block.settings.link != blank -%}
-          </a>
-        {%- endif -%}
-        {%- if forloop.last == false -%}
-          <span style="margin-left: 15px; opacity: 0.5;">|</span>
-        {%- endif -%}
+  <div class="announcement-bar" style="background-color: {{ section.settings.bg_color }}; color: {{ section.settings.text_color }}; text-align: center; padding: 10px 20px; font-size: 13px; font-weight: 500; letter-spacing: 0.3px; position: relative; z-index: 101; min-height: 40px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+    {%- if section.blocks.size == 0 -%}
+      <div class="announcement-bar__item" style="position: absolute; width: 100%; left: 0; top: 50%; transform: translateY(-50%); opacity: 1;">
+        Free Delivery on orders above ₹999
       </div>
-    {%- endfor -%}
+    {%- else -%}
+      {%- for block in section.blocks -%}
+        <div class="announcement-bar__item" data-index="{{ forloop.index0 }}" style="position: absolute; width: 100%; left: 0; top: 50%; transform: translateY(-50%); opacity: {% if forloop.first %}1{% else %}0{% endif %}; transition: opacity 0.8s ease-in-out; pointer-events: {% if forloop.first %}auto{% else %}none{% endif %};" {{ block.shopify_attributes }}>
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" style="color: inherit; text-decoration: none;">
+          {%- endif -%}
+            {{ block.settings.text }}
+          {%- if block.settings.link != blank -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
   </div>
-{%- endif -%}
 
-{% schema %}
+  {%- if section.blocks.size > 1 -%}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const items = document.querySelectorAll('.announcement-bar__item');
+        if (items.length <= 1) return;
+        
+        let currentIndex = 0;
+
+        setInterval(() => {
+          items[currentIndex].style.opacity = '0';
+          items[currentIndex].style.pointerEvents = 'none';
+
+          currentIndex = (currentIndex + 1) % items.length;
+
+          items[currentIndex].style.opacity = '1';
+          items[currentIndex].style.pointerEvents = 'auto';
+        }, 4000);
+      });
+    </script>
+  {%- endif -%}
+{%- endif -%}{% schema %}
 {
   "name": "Announcement Bar",
   "settings": [

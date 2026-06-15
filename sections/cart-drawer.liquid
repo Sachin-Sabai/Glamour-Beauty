@@ -25,9 +25,41 @@
                 {%- unless item.product.has_only_default_variant -%}
                   <p style="font-size: 12px; color: var(--color-text-light); margin-bottom: 5px;">{{ item.variant.title }}</p>
                 {%- endunless -%}
+                {%- if item.selling_plan_allocation -%}
+                  <p style="font-size: 12px; color: var(--color-text-light); margin-bottom: 5px;">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                {%- endif -%}
                 <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
-                  <span>{{ item.final_price | money }}</span>
-                  <strong class="line-item-total">{{ item.final_line_price | money }}</strong>
+                  <div>
+                    {%- if item.original_price != item.final_price -%}
+                      <s style="color: var(--color-text-light); font-size: 11px; margin-right: 5px;">{{ item.original_price | money }}</s>
+                    {%- endif -%}
+                    <span>{{ item.final_price | money }}</span>
+                    {%- if item.unit_price_measurement -%}
+                      <div style="font-size: 11px; color: var(--color-text-light); margin-top: 2px;">
+                        {{ item.unit_price | money }} / 
+                        {%- if item.unit_price_measurement.reference_value != 1 -%}
+                          {{- item.unit_price_measurement.reference_value -}}
+                        {%- endif -%}
+                        {{ item.unit_price_measurement.reference_unit }}
+                      </div>
+                    {%- endif -%}
+                    {%- if item.line_level_discount_allocations.size > 0 -%}
+                      <ul style="list-style: none; padding: 0; margin: 5px 0 0; color: var(--color-primary); font-size: 11px;">
+                        {%- for discount in item.line_level_discount_allocations -%}
+                          <li>
+                            <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                            {{ discount.discount_application.title }} (-{{ discount.amount | money }})
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  </div>
+                  <div style="text-align: right;">
+                    {%- if item.original_line_price != item.final_line_price -%}
+                      <s style="color: var(--color-text-light); font-size: 11px; display: block;">{{ item.original_line_price | money }}</s>
+                    {%- endif -%}
+                    <strong class="line-item-total">{{ item.final_line_price | money }}</strong>
+                  </div>
                 </div>
                 
                 {% render 'quantity-selector', value: item.quantity, line: forloop.index %}
@@ -50,12 +82,27 @@
     </div>
     
     <div class="cart-drawer-footer" style="flex-shrink: 0; {% if cart.item_count == 0 %}display: none;{% endif %}">
+      {%- if cart.cart_level_discount_applications.size > 0 -%}
+        <ul style="list-style: none; padding: 0; margin-bottom: 10px; color: var(--color-primary); font-size: 13px;">
+          {%- for discount in cart.cart_level_discount_applications -%}
+            <li>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              {{ discount.title }}: -{{ discount.total_allocated_amount | money }}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
       <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: 500; margin-bottom: 15px;">
         <span>{{ 'cart.general.subtotal' | t }}</span>
         <span class="cart-subtotal">{{ cart.total_price | money }}</span>
       </div>
       <p style="font-size: 12px; color: var(--color-text-light); text-align: center; margin-bottom: 15px;">{{ 'cart.general.shipping_at_checkout' | t }}</p>
-      <a href="/checkout" class="btn btn-primary btn-full" style="padding: 16px; font-size: 16px; letter-spacing: 1px; display: block; text-align: center; text-decoration: none;">{{ 'cart.general.checkout' | t }}</a>
+      <button type="submit" name="checkout" class="btn btn-primary btn-full" style="padding: 16px; font-size: 16px; letter-spacing: 1px; display: block; text-align: center; width: 100%; border: none; cursor: pointer; font-family: inherit;">{{ 'cart.general.checkout' | t }}</button>
+      {%- if additional_checkout_buttons -%}
+        <div class="additional-checkout-buttons" style="margin-top: 15px;">
+          {{ content_for_additional_checkout_buttons }}
+        </div>
+      {%- endif -%}
     </div>
   </form>
 </div>

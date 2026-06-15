@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.colors_background_1 }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <title>{{ 'gift_cards.issued.title' | t: value: gift_card.initial_value_with_amount, shop: shop.name }}</title>
+    <meta name="description" content="{{ 'gift_cards.issued.subtext' | t }}">
+    
+    {{ content_for_header }}
+    
+    <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
+    
+    <style>
+      :root {
+        --color-primary: {{ settings.colors_primary | default: '#000000' }};
+        --color-bg: {{ settings.colors_background_1 | default: '#ffffff' }};
+        --color-text: {{ settings.colors_text | default: '#333333' }};
+        --font-body: {{ settings.type_body_font.family | default: 'sans-serif' }};
+        --font-heading: {{ settings.type_header_font.family | default: 'sans-serif' }};
+      }
+      body {
+        font-family: var(--font-body);
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        margin: 0;
+        padding: 40px 20px;
+        text-align: center;
+      }
+      .gift-card-wrapper {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 40px;
+      }
+      .shop-logo { font-family: var(--font-heading); font-size: 24px; font-weight: bold; margin-bottom: 30px; }
+      .shop-logo img { max-width: 150px; height: auto; }
+      .gift-card__title { font-size: 28px; font-family: var(--font-heading); margin-bottom: 10px; }
+      .gift-card__price { font-size: 32px; font-weight: bold; margin: 20px 0; }
+      .gift-card__qr-code { display: flex; justify-content: center; margin: 30px 0; }
+      .gift-card__qr-code img { width: 120px; height: 120px; }
+      .gift-card__code { 
+        background: #f4f4f4; 
+        padding: 15px; 
+        font-size: 20px; 
+        letter-spacing: 2px; 
+        font-family: monospace; 
+        border-radius: 4px;
+        margin-bottom: 20px;
+        word-break: break-all;
+      }
+      .btn {
+        display: inline-block;
+        background: var(--color-primary);
+        color: #fff;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        margin: 10px;
+      }
+      .btn--secondary {
+        background: #f4f4f4;
+        color: var(--color-text);
+      }
+      .gift-card__expired, .gift-card__disabled {
+        color: #d9534f;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      .gift-card__apple-wallet {
+        margin-top: 20px;
+      }
+      @media print {
+        @page { margin: 0.5cm; }
+        p, h2, h3 { orphans: 3; widows: 3; }
+        h2, h3 { page-break-after: avoid; }
+        body { background: #fff; padding: 0; }
+        .gift-card-wrapper { box-shadow: none; padding: 0; }
+        .no-print { display: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    {{ content_for_layout }}
+  </body>
+</html>

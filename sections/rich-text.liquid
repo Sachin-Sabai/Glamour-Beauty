@@ -1,0 +1,149 @@
+<div class="rich-text section-{{ section.id }}-padding" style="background-color: {{ section.settings.bg_color }}; text-align: {{ section.settings.alignment }}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="container" style="max-width: {{ section.settings.max_width }}px; margin: 0 auto;">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'heading' -%}
+          <h2 class="rich-text__heading" {{ block.shopify_attributes }} style="font-size: {{ block.settings.heading_size }}; margin-bottom: 20px;">
+            {{ block.settings.heading }}
+          </h2>
+        {%- when 'text' -%}
+          <div class="rich-text__text" {{ block.shopify_attributes }} style="font-size: 16px; color: var(--color-text-light); line-height: 1.6; margin-bottom: 20px;">
+            {{ block.settings.text }}
+          </div>
+        {%- when 'button' -%}
+          <div class="rich-text__button" {{ block.shopify_attributes }} style="margin-top: 10px;">
+            {%- if block.settings.button_label != blank -%}
+              <a href="{{ block.settings.button_link }}" class="btn {% if block.settings.button_style_secondary %}btn--secondary{% else %}btn-primary{% endif %}">
+                {{ block.settings.button_label }}
+              </a>
+            {%- endif -%}
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Rich Text",
+  "settings": [
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 400,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 800
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Talk about your brand"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            { "value": "clamp(24px, 3vw, 32px)", "label": "Small" },
+            { "value": "clamp(32px, 4vw, 42px)", "label": "Medium" },
+            { "value": "clamp(42px, 5vw, 56px)", "label": "Large" }
+          ],
+          "default": "clamp(32px, 4vw, 42px)"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary",
+          "label": "Use secondary button style",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich Text",
+      "blocks": [
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "button" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -4,7 +4,7 @@
       
       <div style="flex: 1; min-width: 300px;">
         {%- if section.settings.image != blank -%}
-          {{ section.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', style: 'width: 100%; max-height: 400px; object-fit: cover; border-radius: var(--border-radius); box-shadow: 0 15px 30px rgba(0,0,0,0.1);', sizes: '(max-width: 767px) 100vw, 50vw' }}
+          {{ section.settings.image | image_url: width: 800 | image_tag: widths: '375, 550, 750, 1100', loading: 'lazy', style: 'width: 100%; max-height: 400px; object-fit: cover; border-radius: var(--border-radius); box-shadow: 0 15px 30px rgba(0,0,0,0.1);', sizes: '(max-width: 767px) 100vw, 50vw' }}
         {%- else -%}
           <img src="{{ 'brand_philosophy.png' | asset_url }}" alt="Brand Philosophy" width="800" height="800" loading="lazy" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: var(--border-radius); box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
         {%- endif -%}

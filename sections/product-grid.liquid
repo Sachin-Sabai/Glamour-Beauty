@@ -33,11 +33,19 @@
 
       {%- if section.settings.product_list != blank -%}
         {%- for product in section.settings.product_list limit: section.settings.products_to_show -%}
-          {% render 'product-card', product_card_product: product, show_secondary_image: true, show_vendor: true, show_rating: true %}
+          {%- assign lazy_load = true -%}
+          {%- if forloop.index <= 4 -%}
+            {%- assign lazy_load = false -%}
+          {%- endif -%}
+          {% render 'product-card', product_card_product: product, lazy_load: lazy_load, show_secondary_image: true, show_vendor: true, show_rating: true %}
         {%- endfor -%}
       {%- elsif collection != blank and collection.products_count > 0 -%}
         {%- for product in collection.products limit: section.settings.products_to_show -%}
-          {% render 'product-card', product_card_product: product, show_secondary_image: true, show_vendor: true, show_rating: true %}
+          {%- assign lazy_load = true -%}
+          {%- if forloop.index <= 4 -%}
+            {%- assign lazy_load = false -%}
+          {%- endif -%}
+          {% render 'product-card', product_card_product: product, lazy_load: lazy_load, show_secondary_image: true, show_vendor: true, show_rating: true %}
         {%- endfor -%}
       {%- else -%}
         {%- for i in (1..6) -%}

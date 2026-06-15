@@ -1,0 +1,79 @@
+{%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+
+{%- if pick_up_availabilities.size > 0 -%}
+  <div class="pickup-availability-wrapper">
+    {%- assign closest_location = pick_up_availabilities.first -%}
+    
+    <div class="pickup-availability-summary" style="display: flex; gap: 10px; align-items: flex-start; padding: 15px; border: 1px solid var(--color-border); border-radius: var(--border-radius); background: var(--color-bg);">
+      <div class="pickup-icon" style="flex-shrink: 0; margin-top: 2px;">
+        {%- if closest_location.available -%}
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="green" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        {%- else -%}
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="red" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+        {%- endif -%}
+      </div>
+      
+      <div class="pickup-info">
+        {%- if closest_location.available -%}
+          <p style="font-weight: 600; margin-bottom: 5px;">Pickup available at {{ closest_location.location.name }}</p>
+          <p style="font-size: 14px; color: var(--color-text-light); margin-bottom: 10px;">Usually ready in {{ closest_location.pick_up_time }}</p>
+          <button type="button" class="btn-link js-show-pickup-drawer" style="background: none; border: none; padding: 0; color: var(--color-text); text-decoration: underline; cursor: pointer; font-size: 14px;">
+            {%- if pick_up_availabilities.size == 1 -%}
+              View store information
+            {%- else -%}
+              Check availability at other stores
+            {%- endif -%}
+          </button>
+        {%- else -%}
+          <p style="font-weight: 600; margin-bottom: 5px;">Pickup currently unavailable at {{ closest_location.location.name }}</p>
+          {%- if pick_up_availabilities.size > 1 -%}
+            <button type="button" class="btn-link js-show-pickup-drawer" style="background: none; border: none; padding: 0; color: var(--color-text); text-decoration: underline; cursor: pointer; font-size: 14px;">
+              Check availability at other stores
+            </button>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- Pickup Availability Drawer/Modal -->
+    <div class="pickup-availability-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center;">
+      <div class="pickup-availability-modal-content" style="background: #fff; width: 100%; max-width: 500px; max-height: 80vh; overflow-y: auto; border-radius: var(--border-radius); padding: 30px; position: relative;">
+        <button type="button" class="js-close-pickup-drawer" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+        <h3 style="font-size: 20px; margin-bottom: 20px;">{{ product.title | escape }}</h3>
+        {%- unless product.has_only_default_variant -%}
+          <p style="font-size: 14px; color: var(--color-text-light); margin-bottom: 20px;">{{ product.selected_or_first_available_variant.title }}</p>
+        {%- endunless -%}
+
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          {%- for availability in pick_up_availabilities -%}
+            <li style="border-top: 1px solid var(--color-border); padding: 20px 0;">
+              <h4 style="margin-bottom: 10px; font-size: 16px;">{{ availability.location.name }}</h4>
+              
+              <div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 15px;">
+                {%- if availability.available -%}
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="green" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span style="font-size: 14px; font-weight: 500;">Available</span>
+                {%- else -%}
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="red" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  <span style="font-size: 14px; font-weight: 500; color: red;">Unavailable</span>
+                {%- endif -%}
+              </div>
+
+              {%- if availability.available -%}
+                <p style="font-size: 14px; color: var(--color-text-light); margin-bottom: 10px;">Usually ready in {{ availability.pick_up_time }}</p>
+              {%- endif -%}
+
+              {%- assign address = availability.location.address -%}
+              <address style="font-size: 14px; font-style: normal; color: var(--color-text-light); line-height: 1.5;">
+                {{ address | format_address }}
+                {%- if address.phone.size > 0 -%}
+                  <p>{{ address.phone }}</p>
+                {%- endif -%}
+              </address>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

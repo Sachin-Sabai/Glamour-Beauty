@@ -62,14 +62,14 @@
     </div>
 
     <!-- Logo -->
-    <div style="text-align: center; flex: 1; display: flex; justify-content: center; align-items: center;">
+    <div style="text-align: center; flex: 2; display: flex; justify-content: center; align-items: center; padding: 0 10px;">
       <a href="{{ routes.root_url }}" style="display: inline-block; text-decoration: none; position: relative;">
         {%- if section.settings.logo != blank -%}
-          <img width="400" height="400" src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ shop.name }}" style="max-width: {{ section.settings.logo_width }}px; display: block;">
+          <img width="400" height="400" src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ shop.name }}" style="max-width: {{ section.settings.logo_width }}px; display: block; width: 100%; height: auto;">
         {%- else -%}
           <div style="display: flex; flex-direction: column; align-items: center;">
             <svg style="width: 24px; height: 24px; margin-bottom: -5px; fill: var(--color-primary);" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-            <span style="font-family: var(--font-heading); font-size: 32px; font-weight: 600; color: var(--color-text); letter-spacing: 1px;">Glamour<span style="color: var(--color-primary);">Beauty</span></span>
+            <span style="font-family: var(--font-heading); font-size: clamp(20px, 5vw, 32px); font-weight: 600; color: var(--color-text); letter-spacing: 1px; white-space: nowrap;">Glamour<span style="color: var(--color-primary);">Beauty</span></span>
           </div>
         {%- endif -%}
       </a>

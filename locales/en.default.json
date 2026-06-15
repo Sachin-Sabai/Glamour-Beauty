@@ -51,7 +51,11 @@
   },
   "collections": {
     "general": {
-      "view_all": "View All"
+      "view_all": "View All",
+      "no_matches": "No products found",
+      "use_fewer_filters": "Try removing some filters or browse all products.",
+      "empty": "There are no products in this collection.",
+      "clear_filters": "Clear filters"
     }
   },
   "localization": {

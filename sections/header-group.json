@@ -4,7 +4,39 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "settings": {}
+      "blocks": {
+        "block_1": {
+          "type": "announcement",
+          "settings": {
+            "text": "Free Delivery on orders above ₹999",
+            "link": ""
+          }
+        },
+        "block_2": {
+          "type": "announcement",
+          "settings": {
+            "text": "Join our Club and get 15% OFF your first order!",
+            "link": ""
+          }
+        },
+        "block_3": {
+          "type": "announcement",
+          "settings": {
+            "text": "100% Organic & Secure Delivery",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "block_1",
+        "block_2",
+        "block_3"
+      ],
+      "settings": {
+        "show_announcement": true,
+        "bg_color": "#9a1845",
+        "text_color": "#FFFFFF"
+      }
     },
     "header": {
       "type": "header",

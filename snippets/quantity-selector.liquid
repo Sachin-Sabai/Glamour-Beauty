@@ -6,7 +6,7 @@
          name="quantity" 
          class="qty-input" 
          value="{{ value | default: 1 }}" 
-         min="1" 
+         min="{% if line %}0{% else %}1{% endif %}" 
          max="99" 
          {% if line %}data-line="{{ line }}"{% endif %}
          style="width: 50px; text-align: center; border: none; background: transparent; padding: 10px 0; -moz-appearance: textfield;">

@@ -1,0 +1,169 @@
+<div class="featured-product-section section-{{ section.id }}-padding" style="background-color: {{ section.settings.bg_color }}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="container">
+    {%- assign product = all_products[section.settings.product] -%}
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 40px;">
+      
+      <!-- Media Gallery -->
+      <div class="product-media" style="flex: 1.5; min-width: 300px;">
+        {%- if product != blank and product.media.size > 0 -%}
+          <div style="position: relative; border-radius: var(--border-radius); overflow: hidden;">
+            {%- assign media = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
+            <img src="{{ media | image_url: width: 1000 }}" alt="{{ media.alt | escape }}" style="width: 100%; height: auto; display: block;" width="{{ media.width }}" height="{{ media.height }}" loading="lazy">
+          </div>
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' | replace: '<svg', '<svg style="width: 100%; height: auto; display: block;"' }}
+        {%- endif -%}
+      </div>
+      
+      <!-- Product Info -->
+      <div class="product-info" style="flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center;">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'vendor' -%}
+              <div class="product-vendor" {{ block.shopify_attributes }} style="margin-bottom: 10px; font-size: 14px; color: var(--color-text-light); text-transform: uppercase; letter-spacing: 1px;">
+                {{ product.vendor | default: 'Vendor' }}
+              </div>
+              
+            {%- when 'title' -%}
+              <h2 class="product-title" {{ block.shopify_attributes }} style="font-size: clamp(28px, 4vw, 36px); margin-bottom: 15px;">
+                {%- if product != blank -%}
+                  <a href="{{ product.url }}" style="color: inherit; text-decoration: none;">{{ product.title }}</a>
+                {%- else -%}
+                  Example Product Title
+                {%- endif -%}
+              </h2>
+              
+            {%- when 'price' -%}
+              <div class="product-price-wrapper" {{ block.shopify_attributes }} style="font-size: 24px; font-weight: 500; margin-bottom: 20px; color: var(--color-primary);">
+                {%- if product != blank -%}
+                  {% render 'price', product: product %}
+                {%- else -%}
+                  $19.99
+                {%- endif -%}
+              </div>
+              
+            {%- when 'description' -%}
+              <div class="product-description" {{ block.shopify_attributes }} style="font-size: 16px; color: var(--color-text-light); line-height: 1.6; margin-bottom: 30px;">
+                {%- if product != blank -%}
+                  {{ product.description | strip_html | truncatewords: 30 }}
+                {%- else -%}
+                  This is a brief description of the featured product. It highlights the key benefits and features that make this item a must-have for your customers.
+                {%- endif -%}
+              </div>
+              
+            {%- when 'buy_buttons' -%}
+              <div class="product-buy-buttons" {{ block.shopify_attributes }} style="margin-bottom: 30px;">
+                {%- if product != blank -%}
+                  {%- assign product_form_id = 'product-form-' | append: section.id -%}
+                  {%- form 'product', product, id: product_form_id, class: 'product-form' -%}
+                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                    
+                    <button type="submit" name="add" class="btn btn-primary btn-full" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %} style="width: 100%; padding: 15px;">
+                      {% if product.selected_or_first_available_variant.available %}
+                        {{ 'cart.general.add_to_cart' | t }}
+                      {% else %}
+                        {{ 'products.product.out_of_stock' | t }}
+                      {% endif %}
+                    </button>
+                  {%- endform -%}
+                {%- else -%}
+                  <button class="btn btn-primary btn-full" disabled style="width: 100%; padding: 15px;">Add to cart</button>
+                {%- endif -%}
+              </div>
+              
+            {%- when 'share' -%}
+              <div class="product-share" {{ block.shopify_attributes }}>
+                <a href="mailto:?subject={{ product.title | escape }}&body={{ shop.url | append: product.url }}" style="font-size: 14px; color: var(--color-text-light); text-decoration: underline;">Share this product</a>
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Product",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "vendor",
+      "name": "Vendor",
+      "limit": 1
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy buttons",
+      "limit": 1
+    },
+    {
+      "type": "share",
+      "name": "Share",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Product",
+      "blocks": [
+        { "type": "vendor" },
+        { "type": "title" },
+        { "type": "price" },
+        { "type": "description" },
+        { "type": "buy_buttons" },
+        { "type": "share" }
+      ]
+    }
+  ]
+}
+{% endschema %}

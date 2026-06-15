@@ -21,6 +21,9 @@
                 {%- unless item.product.has_only_default_variant -%}
                   <p style="font-size: 14px; color: var(--color-text-light); margin-bottom: 5px;">{{ item.variant.title }}</p>
                 {%- endunless -%}
+                {%- if item.selling_plan_allocation -%}
+                  <p style="font-size: 14px; color: var(--color-text-light); margin-bottom: 5px;">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                {%- endif -%}
                 <div style="font-weight: 500;">
                   {%- if item.original_price != item.final_price -%}
                     <s style="color: var(--color-text-light); font-size: 14px;">{{ item.original_price | money }}</s>
@@ -97,6 +100,11 @@
               {%- endif -%}
             </p>
             <button type="submit" name="checkout" class="btn btn-primary btn-full" style="font-size: 18px; padding: 15px;">{{ 'cart.general.checkout' | t }}</button>
+            {%- if additional_checkout_buttons -%}
+              <div class="additional-checkout-buttons" style="margin-top: 15px;">
+                {{ content_for_additional_checkout_buttons }}
+              </div>
+            {%- endif -%}
             <a href="{{ routes.all_products_collection_url }}" style="display: inline-block; margin-top: 15px; color: var(--color-text); text-decoration: underline;">Continue Shopping</a>
           </div>
         </div>

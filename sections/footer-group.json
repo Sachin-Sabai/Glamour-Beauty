@@ -4,7 +4,55 @@
   "sections": {
     "footer": {
       "type": "footer",
-      "settings": {}
+      "settings": {
+        "bg_color": "#FFFFFF",
+        "text_color": "#2C2C2C"
+      },
+      "blocks": {
+        "block_1": {
+          "type": "text",
+          "settings": {
+            "heading": "About Us",
+            "text": "<p>Premium beauty products crafted with care. Discover your natural glow with GlamourBeauty.</p>"
+          }
+        },
+        "block_2": {
+          "type": "text",
+          "settings": {
+            "heading": "Quick Links",
+            "text": "<p><a href=\"/\">Home</a><br><a href=\"/collections/all\">Catalog</a><br><a href=\"/search\">Search</a></p>"
+          }
+        },
+        "block_contact": {
+          "type": "text",
+          "settings": {
+            "heading": "Contact Us",
+            "text": "<p><strong>Email:</strong><br><a href=\"mailto:hello@glamourbeauty.com\">hello@glamourbeauty.com</a></p><p><strong>Phone:</strong><br><a href=\"tel:+1 (555) 123-4567\">+1 (555) 123-4567</a></p><p><strong>Hours:</strong><br>Mon-Fri: 9am - 6pm<br>Sat: 10am - 4pm</p>"
+          }
+        },
+        "block_legal": {
+          "type": "text",
+          "settings": {
+            "heading": "Legal",
+            "text": "<p><a href=\"/policies/privacy-policy\">Privacy Policy</a><br><a href=\"/policies/refund-policy\">Refund Policy</a><br><a href=\"/policies/terms-of-service\">Terms of Service</a><br><a href=\"/policies/shipping-policy\">Shipping Policy</a></p>"
+          }
+        },
+        "block_support": {
+          "type": "text",
+          "settings": {
+            "heading": "Support & Info",
+            "text": "<p><a href=\"/pages/faq\">FAQ</a><br><a href=\"/pages/our-story\">Our Story</a><br><a href=\"/pages/contact\">Contact</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "block_1",
+        "block_2",
+        "block_4",
+        "block_support",
+        "block_contact",
+        "block_legal"
+      ]
     }
   },
   "order": [

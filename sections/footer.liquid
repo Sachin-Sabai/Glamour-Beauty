@@ -1,103 +1,69 @@
 <footer class="site-footer" role="contentinfo" style="background-color: {{ section.settings.bg_color }}; color: {{ section.settings.text_color }}; padding-top: 40px;">
   <div class="container">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px;">
-      
-      <!-- Column 1: About -->
-      <div>
-        {%- if section.settings.logo != blank -%}
-          <img width="400" height="400" src="{{ section.settings.logo | image_url: width: 300 }}" alt="{{ shop.name }}" style="max-width: 150px; margin-bottom: 20px;">
-        {%- else -%}
-          <h2 style="font-family: var(--font-heading); font-size: 28px; margin-bottom: 20px; color: inherit;">{{ shop.name }}</h2>
-        {%- endif -%}
-        
-        {%- if section.settings.description != blank -%}
-          <p style="opacity: 0.8; line-height: 1.6; margin: 0 0 15px 0; font-size: 14px;">{{ section.settings.description }}</p>
-        {%- endif -%}
-        
-        <div style="display: flex; gap: 15px;">
-          {%- if settings.social_instagram_link != blank -%}
-            <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">Instagram</span>{% render 'icon-social', icon: 'instagram' %}</a>
-          {%- endif -%}
-          {%- if settings.social_facebook_link != blank -%}
-            <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">Facebook</span>{% render 'icon-social', icon: 'facebook' %}</a>
-          {%- endif -%}
-          {%- if settings.social_youtube_link != blank -%}
-            <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">YouTube</span>{% render 'icon-social', icon: 'youtube' %}</a>
-          {%- endif -%}
-          {%- if settings.social_pinterest_link != blank -%}
-            <a href="{{ settings.social_pinterest_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">Pinterest</span>{% render 'icon-social', icon: 'pinterest' %}</a>
-          {%- endif -%}
-          {%- if settings.social_tiktok_link != blank -%}
-            <a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">TikTok</span>{% render 'icon-social', icon: 'tiktok' %}</a>
-          {%- endif -%}
-        </div>
-      </div>
-
-      <!-- Column 2: Quick Links -->
-      <div>
-        <h3 style="font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Quick Links</h3>
-        <ul style="list-style: none; padding: 0; margin: 0; opacity: 0.8; line-height: 2;">
-          {%- for link in linklists[section.settings.menu_1].links -%}
-            <li><a href="{{ link.url }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">{{ link.title }}</a></li>
-          {%- endfor -%}
-          <li><a href="/?view=our-story" style="text-decoration: none; color: inherit; transition: color 0.3s;">Our Story</a></li>
-          <li><a href="/pages/faq" style="text-decoration: none; color: inherit; transition: color 0.3s;">FAQ</a></li>
-        </ul>
-      </div>
-
-
-
-      <!-- Column 4: Contact -->
-      <div>
-        <h3 style="font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Contact Us</h3>
-        <ul style="list-style: none; padding: 0; margin: 0; opacity: 0.8; line-height: 1.8; font-size: 14px;">
-          {%- if settings.contact_email != blank -%}
-            <li style="margin-bottom: 5px;">
-              <strong>Email:</strong><br><a href="mailto:{{ settings.contact_email }}" style="color: inherit; text-decoration: none;">{{ settings.contact_email }}</a>
-            </li>
-          {%- endif -%}
-          {%- if settings.contact_phone != blank -%}
-            <li style="margin-bottom: 5px;">
-              <strong>Phone:</strong><br><a href="tel:{{ settings.contact_phone }}" style="color: inherit; text-decoration: none;">{{ settings.contact_phone }}</a>
-            </li>
-          {%- endif -%}
-          {%- if settings.contact_hours != blank -%}
-            <li>
-              <strong>Hours:</strong><br>{{ settings.contact_hours | newline_to_br }}
-            </li>
-          {%- endif -%}
-        </ul>
-      </div>
-      
-      <!-- Column 5: Legal -->
-      <div>
-        <h3 style="font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Legal</h3>
-        <ul style="list-style: none; padding: 0; margin: 0; opacity: 0.8; line-height: 1.8; font-size: 14px;">
-          <li style="margin-bottom: 5px;"><a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">Privacy Policy</a></li>
-          <li style="margin-bottom: 5px;"><a href="{{ shop.refund_policy.url | default: '/policies/refund-policy' }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">Refund Policy</a></li>
-          <li style="margin-bottom: 5px;"><a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">Terms of Service</a></li>
-          <li style="margin-bottom: 5px;"><a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">Shipping Policy</a></li>
-        </ul>
-      </div>
-      
-    </div>
-
-    {%- if section.settings.show_newsletter -%}
-      <div style="border-top: 1px solid rgba(255,255,255,0.1); padding: 20px 0; text-align: center;">
-        <h3 style="font-size: 16px; margin: 0 0 10px 0;">Subscribe to our emails</h3>
-        <div style="max-width: 400px; margin: 0 auto;">
-          {%- form 'customer', id: 'footer-newsletter' -%}
-            <input type="hidden" name="contact[tags]" value="newsletter">
-            <div style="display: flex; border-bottom: 1px solid currentColor;">
-              <label class="visually-hidden" for="FooterNewsletter">Email</label>
-              <input type="email" name="contact[email]" id="FooterNewsletter" placeholder="Email address" required style="flex-grow: 1; padding: 10px 0; background: transparent; border: none; color: inherit; outline: none;">
-              <button type="submit" style="background: transparent; border: none; color: inherit; cursor: pointer; padding: 6px 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">{{ 'general.newsletter_form.submit' | t }}</button>
-            </div>
-            {%- if form.posted_successfully? -%}
-              <p style="margin-top: 10px; color: #4BB543; font-size: 14px;">{{ 'general.newsletter.success_message' | t }}</p>
+    {%- if section.blocks.size > 0 -%}
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px;">
+        {%- for block in section.blocks -%}
+          <div class="footer-block" {{ block.shopify_attributes }}>
+            {%- if block.settings.heading != blank -%}
+              <h3 style="font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">{{ block.settings.heading }}</h3>
             {%- endif -%}
-          {%- endform -%}
-        </div>
+
+            {%- case block.type -%}
+              {%- when 'text' -%}
+                <div class="footer-block__text" style="opacity: 0.8; line-height: 1.6; font-size: 14px;">
+                  {{ block.settings.text }}
+                </div>
+              {%- when 'link_list' -%}
+                {%- if block.settings.menu != blank -%}
+                  <ul style="list-style: none; padding: 0; margin: 0; opacity: 0.8; line-height: 2;">
+                    {%- for link in block.settings.menu.links -%}
+                      <li><a href="{{ link.url }}" style="text-decoration: none; color: inherit; transition: color 0.3s;">{{ link.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              {%- when 'newsletter' -%}
+                <div class="footer-block__newsletter">
+                  <div style="max-width: 400px;">
+                    {%- form 'customer', id: 'footer-newsletter' -%}
+                      <input type="hidden" name="contact[tags]" value="newsletter">
+                      <div style="display: flex; border-bottom: 1px solid currentColor;">
+                        <label class="visually-hidden" for="FooterNewsletter">Email</label>
+                        <input type="email" name="contact[email]" id="FooterNewsletter" placeholder="Email address" required style="flex-grow: 1; padding: 10px 0; background: transparent; border: none; color: inherit; outline: none;">
+                        <button type="submit" style="background: transparent; border: none; color: inherit; cursor: pointer; padding: 6px 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">{{ 'general.newsletter_form.submit' | t }}</button>
+                      </div>
+                      {%- if form.posted_successfully? -%}
+                        <p style="margin-top: 10px; color: #4BB543; font-size: 14px;">{{ 'general.newsletter.success_message' | t }}</p>
+                      {%- endif -%}
+                    {%- endform -%}
+                  </div>
+                  {%- if block.settings.show_social -%}
+                    <div style="display: flex; gap: 15px; margin-top: 20px;">
+                      {%- if settings.social_instagram_link != blank -%}
+                        <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">Instagram</span>{% render 'icon-social', icon: 'instagram' %}</a>
+                      {%- endif -%}
+                      {%- if settings.social_facebook_link != blank -%}
+                        <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">Facebook</span>{% render 'icon-social', icon: 'facebook' %}</a>
+                      {%- endif -%}
+                      {%- if settings.social_youtube_link != blank -%}
+                        <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">YouTube</span>{% render 'icon-social', icon: 'youtube' %}</a>
+                      {%- endif -%}
+                      {%- if settings.social_tiktok_link != blank -%}
+                        <a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener" style="color: inherit; opacity: 0.8; transition: opacity 0.3s;"><span class="visually-hidden">TikTok</span>{% render 'icon-social', icon: 'tiktok' %}</a>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- when 'image' -%}
+                <div class="footer-block__image">
+                  {%- if block.settings.image != blank -%}
+                    <img src="{{ block.settings.image | image_url: width: 300 }}" alt="{{ block.settings.image.alt | escape }}" style="max-width: {{ block.settings.image_width }}px; height: auto;" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy">
+                  {%- else -%}
+                    {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                  {%- endif -%}
+                </div>
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
       </div>
     {%- endif -%}
 
@@ -148,7 +114,6 @@
         &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright_text }}
       </div>
       <div style="display: flex; gap: 10px; align-items: center;">
-        <!-- Icons can be added here or payment svg icons -->
         <span class="visually-hidden">Payment methods</span>
         {% for type in shop.enabled_payment_types %}
           {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
@@ -161,6 +126,7 @@
 {% schema %}
 {
   "name": "Footer",
+  "max_blocks": 8,
   "settings": [
     {
       "type": "color",
@@ -173,34 +139,6 @@
       "id": "text_color",
       "label": "Text Color",
       "default": "#FFFFFF"
-    },
-    {
-      "type": "image_picker",
-      "id": "logo",
-      "label": "Logo (optional)"
-    },
-    {
-      "type": "textarea",
-      "id": "description",
-      "label": "Store Description",
-      "default": "Premium beauty products crafted with care. Discover your natural glow with GlamourBeauty."
-    },
-    {
-      "type": "link_list",
-      "id": "menu_1",
-      "label": "Menu 1",
-      "default": "footer"
-    },
-    {
-      "type": "link_list",
-      "id": "menu_2",
-      "label": "Menu 2"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_newsletter",
-      "label": "Show Newsletter Signup",
-      "default": true
     },
     {
       "type": "checkbox",
@@ -226,6 +164,97 @@
       "label": "Additional Copyright Text",
       "default": "All rights reserved."
     }
-  ]
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Quick links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "footer"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "About Us"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Share store details, promotions, or brand content with your customers.</p>"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "min": 50,
+          "max": 300,
+          "step": 10,
+          "default": 150,
+          "unit": "px",
+          "label": "Image width"
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Subscribe to our emails"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social",
+          "label": "Show social icons",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "text"
+      },
+      {
+        "type": "link_list"
+      },
+      {
+        "type": "newsletter"
+      }
+    ]
+  }
 }
 {% endschema %}

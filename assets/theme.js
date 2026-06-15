@@ -283,11 +283,17 @@ document.addEventListener('DOMContentLoaded', () => {
           let qty = parseInt(input.value);
           if (qtyBtn.classList.contains('qty-plus')) qty++;
           if (qtyBtn.classList.contains('qty-minus')) qty--;
-          if (qty < 1) qty = 1;
+          
+          const line = input.dataset.line;
+          
+          if (!line && qty < 1) {
+             qty = 1; // Minimum 1 on product pages
+          } else if (line && qty < 0) {
+             qty = 0; // Minimum 0 in cart (removes item)
+          }
           
           input.value = qty;
           
-          const line = input.dataset.line;
           if (!line) return; // Ignore AJAX update if no line dataset (e.g. product page)
           
           clearTimeout(CartAjax.changeTimeout);
@@ -455,6 +461,27 @@ document.addEventListener('DOMContentLoaded', () => {
     resetAutoplay();
     updateTransform(false); // Initial position
     
+    // Intersection Observer for pausing carousel when offscreen
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) {
+            clearInterval(autoplayTimer);
+          } else {
+            resetAutoplay();
+          }
+        });
+      }, { threshold: 0.1 });
+      observer.observe(carousel);
+    }
+
+    // Prefers reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if(prefersReducedMotion.matches) {
+       clearInterval(autoplayTimer);
+       speed = 0;
+    }
+
     // Touch Events
     let startX = 0;
     let currentX = 0;
@@ -494,48 +521,52 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // 8. Mobile Menu
-  const menuToggle = document.querySelector('.js-mobile-menu-toggle');
+  const menuToggles = document.querySelectorAll('.js-mobile-menu-toggle');
   const mobileMenu = document.querySelector('.mobile-menu-drawer');
   
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('active');
-      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+  if (menuToggles.length > 0 && mobileMenu) {
+    menuToggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+        document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+      });
     });
   }
 
   // 9. Before After Slider
   const baSliders = document.querySelectorAll('.before-after-wrapper');
-  baSliders.forEach(slider => {
-    const handle = slider.querySelector('.before-after-handle');
-    const overlay = slider.querySelector('.before-after-overlay');
-    let isDown = false;
-    
-    slider.addEventListener('mousedown', (e) => { isDown = true; });
-    slider.addEventListener('mouseup', () => { isDown = false; });
-    slider.addEventListener('mouseleave', () => { isDown = false; });
-    
-    slider.addEventListener('mousemove', (e) => {
-      if(!isDown) return;
-      const rect = slider.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const percent = Math.max(0, Math.min(x / rect.width * 100, 100));
-      handle.style.left = `${percent}%`;
-      overlay.style.width = `${percent}%`;
+  if (baSliders.length > 0) {
+    baSliders.forEach(slider => {
+      const handle = slider.querySelector('.before-after-handle');
+      const overlay = slider.querySelector('.before-after-overlay');
+      let isDown = false;
+      
+      slider.addEventListener('mousedown', (e) => { isDown = true; }, {passive: true});
+      slider.addEventListener('mouseup', () => { isDown = false; }, {passive: true});
+      slider.addEventListener('mouseleave', () => { isDown = false; }, {passive: true});
+      
+      slider.addEventListener('mousemove', (e) => {
+        if(!isDown) return;
+        const rect = slider.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const percent = Math.max(0, Math.min(x / rect.width * 100, 100));
+        handle.style.left = `${percent}%`;
+        overlay.style.width = `${percent}%`;
+      }, {passive: true});
+      
+      // Touch support
+      slider.addEventListener('touchstart', () => { isDown = true; }, {passive: true});
+      slider.addEventListener('touchend', () => { isDown = false; }, {passive: true});
+      slider.addEventListener('touchmove', (e) => {
+        if(!isDown) return;
+        const rect = slider.getBoundingClientRect();
+        const x = e.touches[0].clientX - rect.left;
+        const percent = Math.max(0, Math.min(x / rect.width * 100, 100));
+        handle.style.left = `${percent}%`;
+        overlay.style.width = `${percent}%`;
+      }, {passive: true});
     });
-    
-    // Touch support
-    slider.addEventListener('touchstart', () => { isDown = true; }, {passive: true});
-    slider.addEventListener('touchend', () => { isDown = false; }, {passive: true});
-    slider.addEventListener('touchmove', (e) => {
-      if(!isDown) return;
-      const rect = slider.getBoundingClientRect();
-      const x = e.touches[0].clientX - rect.left;
-      const percent = Math.max(0, Math.min(x / rect.width * 100, 100));
-      handle.style.left = `${percent}%`;
-      overlay.style.width = `${percent}%`;
-    }, {passive: true});
-  });
+  }
 
   // 10. Accordion
   const accordions = document.querySelectorAll('.accordion-title');

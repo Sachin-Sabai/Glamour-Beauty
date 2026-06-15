@@ -5,34 +5,73 @@
     <div style="display: flex; flex-wrap: wrap; gap: 40px;">
       
       <!-- Media Gallery -->
-      <div class="product-media staggered-gallery" style="flex: 1.5; min-width: 300px;">
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; position: relative;">
+      <div class="product-media" style="flex: 1.5; min-width: 300px;">
+        <!-- Main Media Display -->
+        <div class="product-main-media-container" style="position: relative; border-radius: var(--border-radius); overflow: hidden; margin-bottom: 15px; background: #f9f9f9;">
           {%- for media in product.media -%}
-            <div class="product-main-image {% if forloop.first %}col-span-2{% endif %}" style="{% if forloop.first %}grid-column: span 2;{% endif %} border-radius: var(--border-radius); overflow: hidden; position: relative;" data-media-id="{{ media.id }}">
+            <div class="product-main-media" data-media-id="{{ media.id }}" style="display: {% if forloop.first %}block{% else %}none{% endif %}; width: 100%; position: relative;">
               {% case media.media_type %}
                 {% when 'image' %}
-                  <img width="800" height="800" src="{{ media | image_url: width: 1000 }}" alt="{{ media.alt | escape }}" style="width: 100%; height: auto; display: block;" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+                  <img src="{{ media | image_url: width: 1200 }}" alt="{{ media.alt | escape }}" style="width: 100%; height: auto; display: block; object-fit: contain;" width="{{ media.width }}" height="{{ media.height }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}">
                 {% when 'external_video' %}
-                  {{ media | external_video_tag: style: 'width: 100%; height: auto; aspect-ratio: 16/9; display: block;' }}
+                  <div style="padding-top: 56.25%; position: relative; width: 100%;">
+                    {{ media | external_video_tag: style: 'position: absolute; top: 0; left: 0; width: 100%; height: 100%;', loading: 'lazy' }}
+                  </div>
                 {% when 'video' %}
                   {{ media | video_tag: controls: true, style: 'width: 100%; height: auto; display: block;' }}
                 {% when 'model' %}
-                  {{ media | model_viewer_tag: style: 'width: 100%; height: 400px; display: block;' }}
+                  <div style="padding-top: 100%; position: relative; width: 100%;">
+                    {{ media | model_viewer_tag: style: 'position: absolute; top: 0; left: 0; width: 100%; height: 100%;', auto-rotate: true, camera-controls: true }}
+                  </div>
                 {% else %}
                   {{ media | media_tag: style: 'width: 100%; height: auto; display: block;' }}
               {% endcase %}
+              
               {%- if forloop.first -%}
                 {% render 'product-badge', product: product %}
               {%- endif -%}
             </div>
           {%- endfor -%}
+
+          <!-- AR Button -->
+          {%- assign first_3d_model = product.media | where: "media_type", "model" | first -%}
+          {%- if first_3d_model -%}
+            <button
+              class="btn btn--secondary product__xr-button"
+              type="button"
+              aria-label="View in your space"
+              data-shopify-xr
+              data-shopify-model3d-id="{{ first_3d_model.id }}"
+              data-shopify-title="{{ product.title | escape }}"
+              data-shopify-xr-hidden
+              style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 2; border-radius: 30px; display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.9); border: 1px solid var(--color-border);"
+            >
+              <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+              <span>View in your space</span>
+            </button>
+          {%- endif -%}
         </div>
-        <style>
-          @media (max-width: 767px) {
-            .staggered-gallery > div { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; grid-template-columns: none !important; }
-            .staggered-gallery > div > div { flex: 0 0 100%; scroll-snap-align: start; }
-          }
-        </style>
+
+        <!-- Thumbnails -->
+        {%- if product.media.size > 1 -%}
+          <div class="product-thumbnails" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px;">
+            {%- for media in product.media -%}
+              <button type="button" class="product-thumbnail-btn {% if forloop.first %}is-active{% endif %}" data-media-id="{{ media.id }}" aria-label="Load media {{ forloop.index }} of {{ product.media.size }}" style="border: 2px solid {% if forloop.first %}var(--color-primary){% else %}transparent{% endif %}; padding: 0; background: transparent; cursor: pointer; border-radius: 4px; overflow: hidden; position: relative;">
+                <img src="{{ media.preview_image | image_url: width: 150 }}" alt="{{ media.alt | escape }}" width="{{ media.preview_image.width }}" height="{{ media.preview_image.height }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1/1; display: block;">
+                
+                {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+                  <span class="media-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.6); color: #fff; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  </span>
+                {%- elsif media.media_type == 'model' -%}
+                  <span class="media-icon" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.6); color: #fff; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                  </span>
+                {%- endif -%}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
       </div>
       
       <!-- Product Info -->
@@ -48,15 +87,6 @@
             {%- when 'price' -%}
               <div class="product-price-wrapper" {{ block.shopify_attributes }} style="font-size: 24px; font-weight: 500; margin-bottom: 20px; color: var(--color-primary);">
                 {% render 'price', product: product %}
-                {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
-                  <div class="unit-price" style="font-size: 14px; color: var(--color-text-light); margin-top: 5px;">
-                    {{ product.selected_or_first_available_variant.unit_price | money }} / 
-                    {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
-                      {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
-                    {%- endif -%}
-                    {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
-                  </div>
-                {%- endif -%}
               </div>
             {%- when 'description' -%}
               <div class="product-description" {{ block.shopify_attributes }} style="font-size: 16px; color: var(--color-text-light); line-height: 1.6; margin-bottom: 30px;">
@@ -107,18 +137,20 @@
                 {%- endform -%}
 
                 <!-- Pickup Availability -->
-                {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true -%}
-                {%- if pick_up_availabilities.size > 0 -%}
-                  <div class="pickup-availability" style="margin-top: 20px; padding: 15px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
-                    <div style="display: flex; gap: 10px; align-items: flex-start;">
-                      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                      <div>
-                        <p style="font-weight: 600; margin-bottom: 5px;">Pickup available at {{ pick_up_availabilities.first.location.name }}</p>
-                        <p style="font-size: 14px; color: var(--color-text-light);">Usually ready in {{ pick_up_availabilities.first.pick_up_time }}</p>
+                <pickup-availability class="pickup-availability-root" data-root-url="{{ routes.root_url }}" data-variant-id="{{ product.selected_or_first_available_variant.id }}" data-has-only-default-variant="{{ product.has_only_default_variant }}" style="display: block; margin-top: 20px;">
+                  {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+                  {%- if pick_up_availabilities.size > 0 -%}
+                    <div class="pickup-availability-summary" style="padding: 15px; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
+                      <div style="display: flex; gap: 10px; align-items: flex-start;">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <div>
+                          <p style="font-weight: 600; margin-bottom: 5px;">Pickup available at {{ pick_up_availabilities.first.location.name }}</p>
+                          <p style="font-size: 14px; color: var(--color-text-light);">Usually ready in {{ pick_up_availabilities.first.pick_up_time }}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                {%- endif -%}
+                  {%- endif -%}
+                </pickup-availability>
               </div>
             {%- when 'collapsible_tab' -%}
               <div class="accordion-item" {{ block.shopify_attributes }}>
@@ -165,3 +197,105 @@
   ]
 }
 {% endschema %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const thumbnails = document.querySelectorAll('.product-thumbnail-btn');
+    const mainMedias = document.querySelectorAll('.product-main-media');
+
+    if (thumbnails.length > 0) {
+      thumbnails.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const mediaId = this.getAttribute('data-media-id');
+          
+          // Update active thumbnail
+          thumbnails.forEach(t => {
+            t.classList.remove('is-active');
+            t.style.borderColor = 'transparent';
+          });
+          this.classList.add('is-active');
+          this.style.borderColor = 'var(--color-primary)';
+          
+          // Show active media
+          mainMedias.forEach(media => {
+            if (media.getAttribute('data-media-id') === mediaId) {
+              media.style.display = 'block';
+              
+              // Pause other videos if present
+              const activeVideo = media.querySelector('video');
+              if (activeVideo) activeVideo.play();
+            } else {
+              media.style.display = 'none';
+              const inactiveVideo = media.querySelector('video');
+              if (inactiveVideo) inactiveVideo.pause();
+              
+              // Pause YouTube/Vimeo iframe
+              const iframe = media.querySelector('iframe');
+              if (iframe) {
+                const src = iframe.src;
+                iframe.src = src; // Reload iframe to stop playing
+              }
+            }
+          });
+        });
+      });
+    }
+
+    // Listen for variant changes from variant-picker.liquid
+    document.addEventListener('variant:changed', function(event) {
+      const variant = event.detail.variant;
+      if (variant && variant.featured_media) {
+        const mediaId = variant.featured_media.id.toString();
+        const thumbnail = document.querySelector(`.product-thumbnail-btn[data-media-id="${mediaId}"]`);
+        if (thumbnail) {
+          thumbnail.click();
+        }
+      }
+      
+      // Update Pickup Availability
+      const pickupAvailability = document.querySelector('pickup-availability');
+      if (pickupAvailability && variant) {
+        pickupAvailability.setAttribute('data-variant-id', variant.id);
+        const url = `${pickupAvailability.dataset.rootUrl}variants/${variant.id}/?section_id=pickup-availability`;
+        fetch(url)
+          .then(response => response.text())
+          .then(text => {
+            const html = new DOMParser().parseFromString(text, 'text/html');
+            const newContent = html.querySelector('.pickup-availability-wrapper');
+            if (newContent) {
+              pickupAvailability.innerHTML = newContent.outerHTML;
+            } else {
+              pickupAvailability.innerHTML = '';
+            }
+          })
+          .catch(e => console.error('Error fetching pickup availability:', e));
+      } else if (pickupAvailability && !variant) {
+        pickupAvailability.innerHTML = '';
+      }
+    });
+
+    // Handle Pickup Modal
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('js-show-pickup-drawer')) {
+        const modal = e.target.closest('pickup-availability').querySelector('.pickup-availability-modal');
+        if (modal) modal.style.display = 'flex';
+      }
+      if (e.target.classList.contains('js-close-pickup-drawer') || e.target.classList.contains('pickup-availability-modal')) {
+        const modal = e.target.closest('.pickup-availability-modal') || e.target;
+        modal.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+{%- assign first_3d_model = product.media | where: "media_type", "model" | first -%}
+{%- if first_3d_model -%}
+  <script type="application/json" id="ModelJson-{{ section.id }}">
+    {{ product.media | where: 'media_type', 'model' | json }}
+  </script>
+  <script>
+    window.ShopifyXR=window.ShopifyXR||function(){(ShopifyXR.q=ShopifyXR.q||[]).push(arguments)};
+    ShopifyXR('addModels', JSON.parse(document.getElementById('ModelJson-{{ section.id }}').textContent));
+  </script>
+  <script src="https://cdn.shopify.com/shopifycloud/shopify-xr-js/assets/v1.0/shopify-xr.en.js" defer></script>
+{%- endif -%}

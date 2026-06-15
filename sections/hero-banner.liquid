@@ -116,7 +116,7 @@
       <div class="hero-badge-overlay">{{ section.settings.badge_text }}</div>
     {%- endif -%}
         {%- if section.settings.image != blank -%}
-          {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'eager', fetchpriority: 'high', style: 'width: 100%; height: 100%; object-fit: cover; object-position: right 20%;', sizes: '(max-width: 767px) 100vw, 50vw' }}
+          {{ section.settings.image | image_url: width: 2000 | image_tag: widths: '375, 550, 750, 1100, 1500, 1780, 2000', loading: 'eager', fetchpriority: 'high', style: 'width: 100%; height: 100%; object-fit: cover; object-position: right 20%;', sizes: '(max-width: 767px) 100vw, 50vw' }}
         {%- else -%}
           <img src="{{ 'hero_model.png' | asset_url }}" alt="Hero Model" width="800" height="800" loading="eager" fetchpriority="high" style="width: 100%; height: 100%; object-fit: cover; object-position: right 20%;">
         {%- endif -%}
@@ -186,7 +186,7 @@
       "type": "text",
       "id": "badge_text",
       "label": "Badge Text",
-      "default": "✨ New Arrivals"
+      "default": "NEW ARRIVALS"
     }
   ],
   "presets": [

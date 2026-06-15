@@ -1,0 +1,82 @@
+<div class="gift-card-wrapper">
+  <div class="shop-logo">
+    {%- if section.settings.logo != blank -%}
+      <img src="{{ section.settings.logo | image_url: width: 150 }}" alt="{{ shop.name }}" loading="lazy" width="{{ section.settings.logo.width }}" height="{{ section.settings.logo.height }}">
+    {%- else -%}
+      {{ shop.name }}
+    {%- endif -%}
+  </div>
+
+  <h1 class="gift-card__title">Here's your gift card!</h1>
+
+  <div class="gift-card__price">
+    {%- if gift_card.enabled == false or gift_card.expired -%}
+      <p class="gift-card__disabled">This gift card has expired or is disabled.</p>
+    {%- endif -%}
+    
+    <p>Value: {{ gift_card.initial_value | money }}</p>
+    {%- if gift_card.balance != gift_card.initial_value -%}
+      <p style="font-size: 16px; font-weight: normal;">Remaining balance: {{ gift_card.balance | money }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if gift_card.expires_on -%}
+    <p class="gift-card__text">
+      Expires on {{ gift_card.expires_on | date: "%B %d, %Y" }}
+    </p>
+  {%- endif -%}
+
+  <div class="gift-card__qr-code" data-identifier="{{ gift_card.qr_identifier }}"></div>
+
+  <div class="gift-card__code">
+    {{ gift_card.code | format_code }}
+  </div>
+  
+  <p style="font-size: 14px; margin-bottom: 30px;">Use this code at checkout to redeem your gift card.</p>
+
+  <div class="gift-card__buttons no-print">
+    <button class="btn" onclick="window.print();">Print Gift Card</button>
+    <a href="{{ shop.url }}" class="btn btn--secondary" target="_blank" rel="noopener">
+      Continue Shopping
+    </a>
+    <button class="btn btn--secondary" onclick="copyGiftCardCode()">Copy Code</button>
+  </div>
+
+  {%- if gift_card.pass_url -%}
+    <div class="gift-card__apple-wallet no-print">
+      <a href="{{ gift_card.pass_url }}">
+        <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="Add to Apple Wallet" loading="lazy">
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    new QRCode(document.querySelector('.gift-card__qr-code'), {
+      text: document.querySelector('.gift-card__qr-code').dataset.identifier,
+      width: 120,
+      height: 120
+    });
+  });
+
+  function copyGiftCardCode() {
+    const code = "{{ gift_card.code }}";
+    navigator.clipboard.writeText(code).then(function() {
+      alert('Gift card code copied to clipboard');
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Gift Card",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    }
+  ]
+}
+{% endschema %}
