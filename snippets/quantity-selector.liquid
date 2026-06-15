@@ -1,6 +1,8 @@
 <div class="quantity-selector" style="display: inline-flex; align-items: center; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
-  <button type="button" class="qty-minus qty-btn" data-cart-quantity-minus {% if line %}data-line="{{ line }}"{% endif %} style="padding: 10px 15px; background: transparent; border: none; cursor: pointer; color: var(--color-text); font-size: 18px;">&minus;</button>
+  <button type="button" aria-label="Decrease quantity" class="qty-minus qty-btn" data-cart-quantity-minus {% if line %}data-line="{{ line }}"{% endif %} style="padding: 10px 15px; background: transparent; border: none; cursor: pointer; color: var(--color-text); font-size: 18px;">&minus;</button>
+  <label for="Quantity-{{ product.id | default: line | default: 'item' }}" class="visually-hidden">Quantity</label>
   <input type="number" 
+         id="Quantity-{{ product.id | default: line | default: 'item' }}"
          name="quantity" 
          class="qty-input" 
          value="{{ value | default: 1 }}" 
@@ -8,7 +10,7 @@
          max="99" 
          {% if line %}data-line="{{ line }}"{% endif %}
          style="width: 50px; text-align: center; border: none; background: transparent; padding: 10px 0; -moz-appearance: textfield;">
-  <button type="button" class="qty-plus qty-btn" data-cart-quantity-plus {% if line %}data-line="{{ line }}"{% endif %} style="padding: 10px 15px; background: transparent; border: none; cursor: pointer; color: var(--color-text); font-size: 18px;">&plus;</button>
+  <button type="button" aria-label="Increase quantity" class="qty-plus qty-btn" data-cart-quantity-plus {% if line %}data-line="{{ line }}"{% endif %} style="padding: 10px 15px; background: transparent; border: none; cursor: pointer; color: var(--color-text); font-size: 18px;">&plus;</button>
   <style>
     .qty-input::-webkit-outer-spin-button,
     .qty-input::-webkit-inner-spin-button {

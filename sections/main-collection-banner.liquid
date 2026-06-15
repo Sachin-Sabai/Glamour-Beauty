@@ -1,6 +1,6 @@
 <div class="collection-banner" style="position: relative; padding: 100px 20px; text-align: center; color: #fff;">
   {%- if collection.image -%}
-    <img width="400" height="400" src="{{ collection.image | image_url: width: 2000 }}" alt="{{ collection.title }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
+    <img width="400" height="400" src="{{ collection.image | image_url: width: 2000 }}" alt="{{ collection.title }}" fetchpriority="high" loading="eager" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
   {%- else -%}
     <div style="position: absolute; inset: 0; background: var(--color-primary); z-index: 1;"></div>
   {%- endif -%}

@@ -1,5 +1,11 @@
+{%- if section.blocks.size > 0 or request.design_mode -%}
 <div class="testimonials-section" style="padding: 40px 0; background-color: {{ section.settings.bg_color }};">
   <div class="container">
+    {%- if section.blocks.size == 0 -%}
+      <div style="text-align: center; padding: 40px; border: 2px dashed var(--color-border); color: var(--color-text-light);">
+        <p>Add review blocks to show the testimonials carousel.</p>
+      </div>
+    {%- else -%}
     <div class="carousel" data-slides="1" data-speed="{{ section.settings.autoplay_speed | times: 1000 }}">
       <div class="carousel-inner">
         {%- for block in section.blocks -%}
@@ -38,8 +44,10 @@
       </div>
       <div class="carousel-dots"></div>
     </div>
+    {%- endif -%}
   </div>
 </div>
+{%- endif -%}
 
 {% schema %}
 {

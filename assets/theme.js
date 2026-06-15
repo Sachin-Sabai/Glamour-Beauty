@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         header.classList.remove('scrolled');
       }
-    });
+    }, {passive: true});
   }
 
   // 2. Scroll Progress Bar
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
       progressBar.style.width = scrolled + "%";
-    });
+    }, {passive: true});
   }
 
   // 3. Announcement Ticker
@@ -76,7 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     static async addItem(id, quantity = 1) {
       const drawer = document.querySelector('.cart-drawer');
-      if(drawer) drawer.style.opacity = '0.5';
+      if(drawer) {
+        drawer.style.pointerEvents = 'none';
+        drawer.classList.add('cart-loading');
+      }
       try {
         const response = await fetch(window.routes.cart_add_url, {
           method: 'POST',
@@ -84,46 +87,120 @@ document.addEventListener('DOMContentLoaded', () => {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
-          body: JSON.stringify({ items: [{ id, quantity }] })
+          body: JSON.stringify({ 
+            items: [{ id, quantity }],
+            sections: 'main-cart,cart-drawer',
+            sections_url: window.location.pathname
+          })
         });
         const data = await response.json();
         if (data.status) {
           if (window.showToast) window.showToast(data.description || window.cartStrings?.error || 'Error', 'error');
         } else {
-          await this.refreshCart();
+          if (data.sections) {
+            if (data.sections['cart-drawer']) {
+              const html = new DOMParser().parseFromString(data.sections['cart-drawer'], 'text/html');
+              const newDrawer = html.querySelector('.cart-drawer');
+              const currentDrawer = document.querySelector('.cart-drawer');
+              if (newDrawer && currentDrawer) {
+                currentDrawer.innerHTML = newDrawer.innerHTML;
+              }
+            }
+            if (data.sections['main-cart']) {
+              const html = new DOMParser().parseFromString(data.sections['main-cart'], 'text/html');
+              const newMain = html.querySelector('.cart-page');
+              const currentMain = document.querySelector('.cart-page');
+              if (newMain && currentMain) {
+                currentMain.innerHTML = newMain.innerHTML;
+              }
+            }
+          }
+          
+          fetch(window.routes.cart_url + '.js')
+            .then(res => res.json())
+            .then(cart => {
+              const countElements = document.querySelectorAll('.cart-count-badge');
+              if (countElements.length) {
+                countElements.forEach(el => el.textContent = cart.item_count);
+              }
+            });
+
           this.openCart();
         }
       } catch (error) {
         console.error('Error adding to cart', error);
         if (window.showToast) window.showToast('Error adding to cart', 'error');
       } finally {
-        if(drawer) drawer.style.opacity = '1';
+        if(drawer) {
+          drawer.style.pointerEvents = '';
+          drawer.classList.remove('cart-loading');
+        }
       }
     }
 
     static async changeItem(line, quantity) {
       const drawer = document.querySelector('.cart-drawer');
       const cartForm = document.querySelector('#cart-form');
-      if(drawer) drawer.style.opacity = '0.5';
-      if(cartForm) cartForm.style.opacity = '0.5';
+      if(drawer) {
+        drawer.style.pointerEvents = 'none';
+        drawer.classList.add('cart-loading');
+      }
+      if(cartForm) {
+        cartForm.style.pointerEvents = 'none';
+        cartForm.classList.add('cart-loading');
+      }
       
       try {
-        await fetch(window.routes.cart_change_url, {
+        const response = await fetch(window.routes.cart_change_url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
-          body: JSON.stringify({ line, quantity })
+          body: JSON.stringify({ 
+            line, 
+            quantity,
+            sections: 'main-cart,cart-drawer',
+            sections_url: window.location.pathname
+          })
         });
+        const data = await response.json();
         
-        await this.refreshCart();
+        if (data.sections) {
+          if (data.sections['cart-drawer']) {
+            const html = new DOMParser().parseFromString(data.sections['cart-drawer'], 'text/html');
+            const newDrawer = html.querySelector('.cart-drawer');
+            const currentDrawer = document.querySelector('.cart-drawer');
+            if (newDrawer && currentDrawer) {
+              currentDrawer.innerHTML = newDrawer.innerHTML;
+            }
+          }
+          if (data.sections['main-cart']) {
+            const html = new DOMParser().parseFromString(data.sections['main-cart'], 'text/html');
+            const newMain = html.querySelector('.cart-page');
+            const currentMain = document.querySelector('.cart-page');
+            if (newMain && currentMain) {
+              currentMain.innerHTML = newMain.innerHTML;
+            }
+          }
+        }
+        
+        const countElements = document.querySelectorAll('.cart-count-badge');
+        if (countElements.length && data.item_count !== undefined) {
+          countElements.forEach(el => el.textContent = data.item_count);
+        }
       } catch (error) {
         console.error('Error changing item', error);
         if (window.showToast) window.showToast('Error updating cart', 'error');
       } finally {
-        if(drawer) drawer.style.opacity = '1';
-        if(cartForm) cartForm.style.opacity = '1';
+        if(drawer) {
+          drawer.style.pointerEvents = '';
+          drawer.classList.remove('cart-loading');
+        }
+        if(cartForm) {
+          cartForm.style.pointerEvents = '';
+          cartForm.classList.remove('cart-loading');
+        }
       }
     }
 
@@ -133,10 +210,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     static async refreshCart() {
       try {
-        const cartResponse = await fetch(window.routes.cart_url + '.js');
+        const [cartResponse, sectionsResponse] = await Promise.all([
+          fetch(window.routes.cart_url + '.js'),
+          fetch(`${window.routes.cart_url}?sections=main-cart,cart-drawer`)
+        ]);
+        
         const cart = await cartResponse.json();
-
-        const sectionsResponse = await fetch(`${window.routes.cart_url}?sections=main-cart,cart-drawer`);
         const sectionsData = await sectionsResponse.json();
 
         // Update Cart Drawer
@@ -236,79 +315,182 @@ document.addEventListener('DOMContentLoaded', () => {
   const carousels = document.querySelectorAll('.carousel');
   carousels.forEach(carousel => {
     const inner = carousel.querySelector('.carousel-inner');
-    const slides = Array.from(inner.children);
-    if(slides.length === 0) return;
+    if(!inner) return;
     
+    // Clear any existing clones if this runs multiple times
+    inner.querySelectorAll('.carousel-clone').forEach(el => el.remove());
+
+    const originalSlides = Array.from(inner.children);
+    const originalCount = originalSlides.length;
+    if(originalCount === 0) return;
+    
+    const slidesDesktop = parseInt(carousel.dataset.slides || 4);
+    
+    // 9. If product count <= visible slides, duplicate original set to fill at least 2 tracks
+    let baseSlides = [...originalSlides];
+    let currentCount = originalCount;
+    while(currentCount <= slidesDesktop * 2) {
+      originalSlides.forEach(slide => {
+         let clone = slide.cloneNode(true);
+         // Don't add clone class yet, these are part of the core infinite loop
+         inner.appendChild(clone);
+         baseSlides.push(clone);
+      });
+      currentCount = baseSlides.length;
+    }
+    
+    const baseCount = baseSlides.length;
+    
+    // 1. Clone slidesDesktop items to the BEGINNING and END
+    const clonesBefore = [];
+    for(let i = baseCount - slidesDesktop; i < baseCount; i++) {
+       let clone = baseSlides[i].cloneNode(true);
+       clone.classList.add('carousel-clone');
+       clone.setAttribute('aria-hidden', 'true');
+       inner.insertBefore(clone, inner.firstChild);
+       clonesBefore.push(clone);
+    }
+    
+    for(let i = 0; i < slidesDesktop; i++) {
+       let clone = baseSlides[i].cloneNode(true);
+       clone.classList.add('carousel-clone');
+       clone.setAttribute('aria-hidden', 'true');
+       inner.appendChild(clone);
+    }
+    
+    const allSlides = Array.from(inner.children);
     const prevBtn = carousel.querySelector('.carousel-arrow-prev');
     const nextBtn = carousel.querySelector('.carousel-arrow-next');
     const dotsContainer = carousel.querySelector('.carousel-dots');
     
     const speed = parseInt(carousel.dataset.speed || 3000);
-    const slidesToScroll = 1;
-    let currentIndex = 0;
+    let currentIndex = slidesDesktop; 
+    let isTransitioning = false;
     let autoplayTimer;
     
-    // Create dots
-    slides.forEach((_, i) => {
-      if(dotsContainer) {
+    // Create dots reflecting original slides
+    if(dotsContainer) {
+      dotsContainer.innerHTML = '';
+      originalSlides.forEach((_, i) => {
         const dot = document.createElement('button');
         dot.className = i === 0 ? 'carousel-dot active' : 'carousel-dot';
-        dot.addEventListener('click', () => goToSlide(i));
+        dot.addEventListener('click', () => {
+           if(isTransitioning) return;
+           // Jump to the closest occurrence of this dot
+           const targetIndex = slidesDesktop + i;
+           isTransitioning = true;
+           goToSlide(targetIndex);
+        });
         dotsContainer.appendChild(dot);
-      }
-    });
+      });
+    }
     const dots = dotsContainer ? Array.from(dotsContainer.children) : [];
 
-    function updateTransform() {
-      const slideWidth = slides[0].offsetWidth;
+    function updateTransform(useTransition = true) {
+      if(allSlides.length === 0) return;
+      const slideWidth = allSlides[0].offsetWidth;
+      inner.style.transition = useTransition ? 'transform 0.5s ease' : 'none';
       inner.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-      if(dotsContainer) {
+      
+      if(dotsContainer && originalCount > 0) {
+        const baseIndex = currentIndex - slidesDesktop;
+        let activeDotIndex = baseIndex % originalCount;
+        if (activeDotIndex < 0) activeDotIndex += originalCount;
+        
         dots.forEach((dot, i) => {
-          dot.classList.toggle('active', i === currentIndex);
+          dot.classList.toggle('active', i === activeDotIndex);
         });
       }
     }
 
     function goToSlide(index) {
-      if(index < 0) index = slides.length - 1;
-      if(index >= slides.length) index = 0;
       currentIndex = index;
-      updateTransform();
+      updateTransform(true);
       resetAutoplay();
     }
 
-    if(prevBtn) prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
-    if(nextBtn) nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
+    inner.addEventListener('transitionend', () => {
+      isTransitioning = false;
+      
+      // Jump backwards if we scrolled into the beginning clones
+      if (currentIndex < slidesDesktop) {
+        inner.style.transition = 'none';
+        currentIndex = currentIndex + baseCount;
+        updateTransform(false);
+      } 
+      // Jump forwards if we scrolled into the ending clones
+      else if (currentIndex >= slidesDesktop + baseCount) {
+        inner.style.transition = 'none';
+        currentIndex = currentIndex - baseCount;
+        updateTransform(false);
+      }
+    });
+
+    if(prevBtn) prevBtn.addEventListener('click', () => {
+       if(!isTransitioning) {
+         isTransitioning = true;
+         goToSlide(currentIndex - 1);
+       }
+    });
+    
+    if(nextBtn) nextBtn.addEventListener('click', () => {
+       if(!isTransitioning) {
+         isTransitioning = true;
+         goToSlide(currentIndex + 1);
+       }
+    });
     
     function resetAutoplay() {
       clearInterval(autoplayTimer);
       if(speed > 0) {
-        autoplayTimer = setInterval(() => goToSlide(currentIndex + 1), speed);
+        autoplayTimer = setInterval(() => {
+           if(!document.hidden && !isTransitioning) {
+             isTransitioning = true;
+             goToSlide(currentIndex + 1);
+           }
+        }, speed);
       }
     }
     
     resetAutoplay();
+    updateTransform(false); // Initial position
     
     // Touch Events
     let startX = 0;
     let currentX = 0;
     
     inner.addEventListener('touchstart', e => {
+      if(isTransitioning) return;
       startX = e.touches[0].clientX;
       clearInterval(autoplayTimer);
     }, {passive: true});
     
     inner.addEventListener('touchmove', e => {
+      if(isTransitioning) return;
       currentX = e.touches[0].clientX;
     }, {passive: true});
     
     inner.addEventListener('touchend', e => {
-      if(startX - currentX > 50) goToSlide(currentIndex + 1);
-      if(currentX - startX > 50) goToSlide(currentIndex - 1);
+      if(isTransitioning || !startX || !currentX) {
+        resetAutoplay();
+        return;
+      }
+      const diff = startX - currentX;
+      if(diff > 50) {
+        isTransitioning = true;
+        goToSlide(currentIndex + 1);
+      } else if(diff < -50) {
+        isTransitioning = true;
+        goToSlide(currentIndex - 1);
+      }
+      startX = 0;
+      currentX = 0;
       resetAutoplay();
     });
     
-    window.addEventListener('resize', updateTransform);
+    window.addEventListener('resize', () => {
+      updateTransform(false);
+    });
   });
 
   // 8. Mobile Menu
@@ -405,7 +587,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         backToTop.classList.remove('visible');
       }
-    });
+    }, {passive: true});
     
     backToTop.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -640,10 +822,6 @@ class VariantSelects extends HTMLElement {
 
   updatePickupAvailability() {
     // Basic stub for updating pickup drawer if present
-  }
-
-  removeErrorMessage() {
-    // Stub
   }
 
   getVariantData() {

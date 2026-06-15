@@ -23,7 +23,8 @@
     {%- form 'customer', id: 'email-signup-banner-form' -%}
       <input type="hidden" name="contact[tags]" value="newsletter">
       <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <input type="email" name="contact[email]" placeholder="Your email address" required style="flex-grow: 1; padding: 15px 20px; border: none; border-radius: var(--border-radius); font-size: 16px; width: 100%; min-width: 250px;">
+        <label for="ContactEmailBanner" class="visually-hidden">Email</label>
+        <input type="email" id="ContactEmailBanner" name="contact[email]" placeholder="Your email address" required style="flex-grow: 1; padding: 15px 20px; border: none; border-radius: var(--border-radius); font-size: 16px; width: 100%; min-width: 250px;">
         <button type="submit" class="btn btn-primary" style="flex-shrink: 0; width: 100%;">{{ section.settings.btn_label }}</button>
         <style>@media (min-width: 480px) { #email-signup-banner-form button { width: auto; } }</style>
       </div>

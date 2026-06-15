@@ -20,10 +20,10 @@
 
     {% if page_description %}
       <meta name="description" content="{{ page_description | escape }}">
+    {% elsif settings.default_meta_description != blank %}
+      <meta name="description" content="{{ settings.default_meta_description | escape }}">
     {% else %}
-      {% if settings.default_meta_description != blank %}
-        <meta name="description" content="{{ settings.default_meta_description | escape }}">
-      {% endif %}
+      <meta name="description" content="{{ shop.description | default: shop.name | escape }}">
     {% endif %}
     {% render 'meta-tags' %}
     

@@ -34,7 +34,49 @@
     },
     "testimonials-carousel": {
       "type": "testimonials-carousel",
-      "settings": {}
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review_text": "This product completely transformed my skin. I can't recommend it enough!",
+            "author": "Sarah M.",
+            "location": "New York, NY",
+            "verified": true,
+            "product_name": "Hydrating Serum"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "review_text": "I've been using this routine for a month and the glow is unreal. Absolutely love the texture and results.",
+            "author": "Priya K.",
+            "location": "Mumbai, MH",
+            "verified": true,
+            "product_name": "Vitamin C Elixir"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "review_text": "Gentle on sensitive skin but highly effective. It has become a staple in my daily routine.",
+            "author": "Elena G.",
+            "location": "London, UK",
+            "verified": true,
+            "product_name": "Soothing Cleanser"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
+      "settings": {
+        "bg_color": "#fef5f6"
+      }
     },
     "how-it-works": {
       "type": "how-it-works",

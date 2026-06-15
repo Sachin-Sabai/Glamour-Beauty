@@ -33,7 +33,25 @@
         {%- endif -%}
 
         {%- if section.settings.btn_label != blank -%}
-          <a href="{{ section.settings.btn_link | default: '/?view=our-story' }}" class="btn btn-primary">{{ section.settings.btn_label }}</a>
+          {%- assign target_link = section.settings.btn_link | default: '/?view=our-story' -%}
+          {%- assign target_label = section.settings.btn_label -%}
+          
+          {%- assign is_current_page = false -%}
+          {%- if target_link == request.path or target_link == request.url -%}
+            {%- assign is_current_page = true -%}
+          {%- elsif target_link contains '?view=' -%}
+            {%- assign view_param = target_link | split: '?view=' | last | split: '&' | first -%}
+            {%- if template.suffix == view_param -%}
+              {%- assign is_current_page = true -%}
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- if is_current_page -%}
+            {%- assign target_link = routes.all_products_collection_url -%}
+            {%- assign target_label = 'Shop now' -%}
+          {%- endif -%}
+
+          <a href="{{ target_link }}" class="btn btn-primary">{{ target_label }}</a>
         {%- endif -%}
       </div>
       
