@@ -105,7 +105,7 @@
               <div class="product-card-actions" style="margin-top: 15px;">
                 <form method="post" action="{{ routes.cart_add_url }}">
                   <input type="hidden" name="id" value="1">
-                  <button type="submit" class="btn btn-primary btn-full" style="border-radius: 6px;">Add to Cart</button>
+                  <button type="submit" class="btn btn-primary btn-full" style="border-radius: 6px;">{{ 'products.product.add_to_cart' | t }}</button>
                 </form>
               </div>
             </div>
@@ -117,7 +117,7 @@
     {%- if section.settings.show_view_all -%}
       <div style="text-align: center; margin-top: 50px;">
         <a href="{{ collection.url | default: routes.all_products_collection_url }}" class="btn btn-primary" style="padding: 15px 40px; font-size: 16px; letter-spacing: 1px;">
-          View All Products
+          {{ 'collections.general.view_all' | t }}
         </a>
       </div>
     {%- endif -%}

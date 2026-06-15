@@ -10,7 +10,7 @@
             <h2 style="font-size: clamp(28px, 4vw, 42px); line-height: 1;">{{ section.settings.heading }}</h2>
           {%- endif -%}
         </div>
-        <a href="{{ routes.collections_url }}" style="color: var(--color-text); font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--color-text); padding-bottom: 2px;">View All &rarr;</a>
+        <a href="{{ routes.collections_url }}" style="color: var(--color-text); font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--color-text); padding-bottom: 2px;">{{ 'collections.general.view_all' | t }} &rarr;</a>
       </div>
     {%- endif -%}
 

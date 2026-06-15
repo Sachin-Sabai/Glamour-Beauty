@@ -7,4 +7,16 @@
     <span class="product-card-price-compare">{{ compare_at_price | money }}</span>
   {%- endif -%}
   <span class="product-card-price-current">{{ price | money }}</span>
+  
+  {%- assign variant = target.selected_or_first_available_variant | default: target -%}
+  {%- if variant.unit_price_measurement -%}
+    <div class="unit-price" style="font-size: 12px; color: var(--color-text-light); margin-top: 4px;">
+      <span class="visually-hidden">Unit price</span>
+      {{ variant.unit_price | money }} / 
+      {%- if variant.unit_price_measurement.reference_value != 1 -%}
+        {{- variant.unit_price_measurement.reference_value -}}
+      {%- endif -%}
+      {{ variant.unit_price_measurement.reference_unit }}
+    </div>
+  {%- endif -%}
 </div>

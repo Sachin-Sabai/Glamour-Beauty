@@ -1,6 +1,6 @@
 <div class="quantity-selector" style="display: inline-flex; align-items: center; border: 1px solid var(--color-border); border-radius: var(--border-radius);">
   <button type="button" aria-label="Decrease quantity" class="qty-minus qty-btn" data-cart-quantity-minus {% if line %}data-line="{{ line }}"{% endif %} style="padding: 10px 15px; background: transparent; border: none; cursor: pointer; color: var(--color-text); font-size: 18px;">&minus;</button>
-  <label for="Quantity-{{ product.id | default: line | default: 'item' }}" class="visually-hidden">Quantity</label>
+  <label for="Quantity-{{ product.id | default: line | default: 'item' }}" class="visually-hidden">{{ 'cart.label.quantity' | t }}</label>
   <input type="number" 
          id="Quantity-{{ product.id | default: line | default: 'item' }}"
          name="quantity" 

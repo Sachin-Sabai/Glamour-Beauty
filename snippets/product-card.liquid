@@ -97,9 +97,9 @@
         <input type="hidden" name="id" value="{{ product_card_product.selected_or_first_available_variant.id }}">
         <button type="submit" class="btn btn-primary btn-full quick-add-btn" {% unless product_card_product.selected_or_first_available_variant.available %}disabled{% endunless %} style="border-radius: 6px;">
           {% if product_card_product.selected_or_first_available_variant.available %}
-            Add to Cart
+            {{ 'products.product.add_to_cart' | t }}
           {% else %}
-            Out of Stock
+            {{ 'products.product.sold_out' | t }}
           {% endif %}
         </button>
       </form>

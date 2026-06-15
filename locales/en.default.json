@@ -6,11 +6,15 @@
     },
     "search": {
       "placeholder": "Search for products...",
-      "no_results": "No results found for \"{{ terms }}\". Check the spelling or use a different word or phrase."
+      "no_results": "No results found for \"{{ terms }}\". Check the spelling or use a different word or phrase.",
+      "search": "Search"
     },
     "pagination": {
       "previous": "Previous",
       "next": "Next"
+    },
+    "newsletter_form": {
+      "submit": "Subscribe"
     },
     "newsletter": {
       "success_message": "Thanks for subscribing!",
@@ -38,7 +42,16 @@
       "taxes_included_and_shipping_policy_html": "Tax included. <a href=\"{{ link }}\">Shipping</a> calculated at checkout.",
       "taxes_included_but_shipping_at_checkout": "Tax included. Shipping calculated at checkout.",
       "taxes_and_shipping_policy_at_checkout_html": "Taxes and <a href=\"{{ link }}\">shipping</a> calculated at checkout.",
-      "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout."
+      "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout.",
+      "continue_shopping": "Continue shopping"
+    },
+    "label": {
+      "quantity": "Quantity"
+    }
+  },
+  "collections": {
+    "general": {
+      "view_all": "View All"
     }
   },
   "localization": {
@@ -61,6 +74,8 @@
       "new_badge": "New",
       "bestseller_badge": "Best Seller",
       "out_of_stock": "Out of Stock",
+      "sold_out": "Sold Out",
+      "add_to_cart": "Add to Cart",
       "available": "In Stock",
       "vendor": "Vendor",
       "quantity": "Quantity",

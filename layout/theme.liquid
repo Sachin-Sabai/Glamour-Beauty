@@ -77,8 +77,7 @@
     <a href="#main-content" class="skip-to-content-link">Skip to content</a>
     <div id="scroll-progress-bar"></div>
 
-    {% section 'announcement-bar' %}
-    {% section 'header' %}
+    {% sections 'header-group' %}
 
     {% if settings.enable_cart_drawer %}
       {% section 'cart-drawer' %}
@@ -88,7 +87,7 @@
       {{ content_for_layout }}
     </main>
 
-    {% section 'footer' %}
+    {% sections 'footer-group' %}
 
     <div id="toast-container"></div>
     

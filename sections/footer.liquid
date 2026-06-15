@@ -91,7 +91,7 @@
             <div style="display: flex; border-bottom: 1px solid currentColor;">
               <label class="visually-hidden" for="FooterNewsletter">Email</label>
               <input type="email" name="contact[email]" id="FooterNewsletter" placeholder="Email address" required style="flex-grow: 1; padding: 10px 0; background: transparent; border: none; color: inherit; outline: none;">
-              <button type="submit" style="background: transparent; border: none; color: inherit; cursor: pointer; padding: 6px 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">Subscribe</button>
+              <button type="submit" style="background: transparent; border: none; color: inherit; cursor: pointer; padding: 6px 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">{{ 'general.newsletter_form.submit' | t }}</button>
             </div>
             {%- if form.posted_successfully? -%}
               <p style="margin-top: 10px; color: #4BB543; font-size: 14px;">{{ 'general.newsletter.success_message' | t }}</p>

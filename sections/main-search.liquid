@@ -10,7 +10,7 @@
       </h1>
       
       <form action="{{ routes.search_url }}" method="get" role="search" style="position: relative; display: flex;">
-        <label for="SearchInputMain" class="visually-hidden">Search</label>
+        <label for="SearchInputMain" class="visually-hidden">{{ 'general.search.search' | t }}</label>
         <input type="search" id="SearchInputMain" name="q" value="{{ search.terms | escape }}" placeholder="What are you looking for?" class="form-input" style="flex-grow: 1; padding: 15px 20px; border-radius: var(--border-radius) 0 0 var(--border-radius); border-right: none; font-size: 16px;">
         <button type="submit" class="btn btn-primary" style="border-radius: 0 var(--border-radius) var(--border-radius) 0; padding: 15px 30px;">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>

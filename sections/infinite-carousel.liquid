@@ -14,10 +14,10 @@
 
     <div class="carousel" data-slides="{{ section.settings.slides_desktop }}" data-speed="{{ section.settings.autoplay_speed | times: 1000 }}">
       {%- if section.settings.show_arrows -%}
-        <button class="carousel-arrow carousel-arrow-prev" aria-label="Previous">
+        <button class="carousel-arrow carousel-arrow-prev" aria-label="{{ 'general.pagination.previous' | t }}">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
-        <button class="carousel-arrow carousel-arrow-next" aria-label="Next">
+        <button class="carousel-arrow carousel-arrow-next" aria-label="{{ 'general.pagination.next' | t }}">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
         </button>
       {%- endif -%}
@@ -77,7 +77,7 @@
                     <div class="product-card-actions" style="margin-top: 15px;">
                       <form method="post" action="{{ routes.cart_add_url }}">
                         <input type="hidden" name="id" value="1">
-                        <button type="submit" class="btn btn-primary btn-full" style="border-radius: 6px;">Add to Cart</button>
+                        <button type="submit" class="btn btn-primary btn-full" style="border-radius: 6px;">{{ 'products.product.add_to_cart' | t }}</button>
                       </form>
                     </div>
                   </div>
