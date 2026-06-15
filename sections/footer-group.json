@@ -41,7 +41,7 @@
           "type": "text",
           "settings": {
             "heading": "Support & Info",
-            "text": "<p><a href=\"/pages/faq\">FAQ</a><br><a href=\"/pages/our-story\">Our Story</a><br><a href=\"/pages/contact\">Contact</a></p>"
+            "text": "<p><a href=\"/pages/faq\">FAQ</a><br><a href=\"/?view=our-story\">Our Story</a><br><a href=\"/pages/contact\">Contact</a></p>"
           }
         }
       },

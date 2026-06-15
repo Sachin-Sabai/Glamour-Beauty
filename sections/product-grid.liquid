@@ -1,4 +1,4 @@
-<div class="product-grid-section" style="padding: 40px 0; background: var(--color-bg);">
+<div class="product-grid-section" style="padding: 40px 0; background: var(--color-bg); content-visibility: auto; contain-intrinsic-size: 800px;">
   <div class="container">
     {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
       <div style="text-align: center; margin-bottom: 40px;">
@@ -34,17 +34,11 @@
       {%- if section.settings.product_list != blank -%}
         {%- for product in section.settings.product_list limit: section.settings.products_to_show -%}
           {%- assign lazy_load = true -%}
-          {%- if forloop.index <= 4 -%}
-            {%- assign lazy_load = false -%}
-          {%- endif -%}
           {% render 'product-card', product_card_product: product, lazy_load: lazy_load, show_secondary_image: true, show_vendor: true, show_rating: true %}
         {%- endfor -%}
       {%- elsif collection != blank and collection.products_count > 0 -%}
         {%- for product in collection.products limit: section.settings.products_to_show -%}
           {%- assign lazy_load = true -%}
-          {%- if forloop.index <= 4 -%}
-            {%- assign lazy_load = false -%}
-          {%- endif -%}
           {% render 'product-card', product_card_product: product, lazy_load: lazy_load, show_secondary_image: true, show_vendor: true, show_rating: true %}
         {%- endfor -%}
       {%- else -%}

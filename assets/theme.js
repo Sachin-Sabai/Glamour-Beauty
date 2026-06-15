@@ -3,11 +3,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. Sticky Header
   const header = document.querySelector('.site-header');
   if (header) {
+    let ticking = false;
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+          } else {
+            header.classList.remove('scrolled');
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     }, {passive: true});
   }
@@ -15,11 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Scroll Progress Bar
   const progressBar = document.getElementById('scroll-progress-bar');
   if (progressBar) {
+    let ticking = false;
     window.addEventListener('scroll', () => {
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      progressBar.style.width = scrolled + "%";
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+          const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const scrolled = (winScroll / height) * 100;
+          progressBar.style.width = scrolled + "%";
+          ticking = false;
+        });
+        ticking = true;
+      }
     }, {passive: true});
   }
 
@@ -335,7 +349,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 9. If product count <= visible slides, duplicate original set to fill at least 2 tracks
     let baseSlides = [...originalSlides];
     let currentCount = originalCount;
-    while(currentCount <= slidesDesktop * 2) {
+    let clonePasses = 0;
+    while(currentCount <= slidesDesktop * 2 && clonePasses < 3) {
       originalSlides.forEach(slide => {
          let clone = slide.cloneNode(true);
          // Don't add clone class yet, these are part of the core infinite loop
@@ -343,6 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
          baseSlides.push(clone);
       });
       currentCount = baseSlides.length;
+      clonePasses++;
     }
     
     const baseCount = baseSlides.length;
@@ -612,11 +628,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // 16. Back To Top
   const backToTop = document.getElementById('back-to-top');
   if (backToTop) {
+    let ticking = false;
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 400) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > 400) {
+            backToTop.classList.add('visible');
+          } else {
+            backToTop.classList.remove('visible');
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     }, {passive: true});
     

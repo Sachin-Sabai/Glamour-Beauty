@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
     
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
@@ -31,22 +32,10 @@
     {%- assign font_body = settings.font_body -%}
     {%- assign font_accent = settings.font_accent -%}
 
-    {%- assign font_heading_bold = font_heading | font_modify: 'weight', 'bolder' -%}
-    {%- assign font_heading_italic = font_heading | font_modify: 'style', 'italic' -%}
-    {%- assign font_body_bold = font_body | font_modify: 'weight', 'bold' -%}
-    {%- assign font_body_italic = font_body | font_modify: 'style', 'italic' -%}
-    {%- assign font_body_bold_italic = font_body_bold | font_modify: 'style', 'italic' -%}
-
     <style>
       {{ font_heading | font_face: font_display: 'swap' }}
       {{ font_body | font_face: font_display: 'swap' }}
       {{ font_accent | font_face: font_display: 'swap' }}
-      
-      {%- if font_heading_bold -%}{{ font_heading_bold | font_face: font_display: 'swap' }}{%- endif -%}
-      {%- if font_heading_italic -%}{{ font_heading_italic | font_face: font_display: 'swap' }}{%- endif -%}
-      {%- if font_body_bold -%}{{ font_body_bold | font_face: font_display: 'swap' }}{%- endif -%}
-      {%- if font_body_italic -%}{{ font_body_italic | font_face: font_display: 'swap' }}{%- endif -%}
-      {%- if font_body_bold_italic -%}{{ font_body_bold_italic | font_face: font_display: 'swap' }}{%- endif -%}
       :root {
         --color-primary: {{ settings.color_primary }};
         --color-secondary: {{ settings.color_secondary }};
